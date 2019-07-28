@@ -5,13 +5,18 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+var crypto = require('crypto');
+var assert = require('assert');
+var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+var key = 'cloudComputing';
+
 module.exports = {
 
     requestAppraisal: function (req, res) {
         var name = req.param("name");
         var MortID = req.param("MortID");
         var MlsID = req.param("MlsID");
-
+        
         RealEstate.create({
             fullName: name,
             MlsID : MlsID,
@@ -69,7 +74,7 @@ module.exports = {
                 var server = "Real Estate";
                 Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
                 });
-                res.locals.layout = "layouts/realEstate/layout2.ejs";
+                res.locals.layout = "layouts/realEstate/layout.ejs";
                 return res.view('pages/realEstate/AppraisalList',{Appraisals:Appraisals});
             }
         });
@@ -102,7 +107,8 @@ module.exports = {
     appraiserSignUp: function (req, res) {
         var email = req.param("email");
         var password = req.param("password");
-
+        var cipher = crypto.createCipher(algorithm, key);  
+        password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
         Appraiser.create({
             email : email,
             password : password
@@ -157,7 +163,9 @@ module.exports = {
                       });
                       return res.send({ status: "unauthentic", error: "Appraiser is not registered" })
                     } else {
-                        if (password == appraiser.password) {
+                        var decipher = crypto.createDecipher(algorithm, key);
+                        var decrypted = decipher.update(appraiser.password, 'hex', 'utf8') + decipher.final('utf8');
+                        if (password == decrypted) {
                             //Log user Sign In successfull
                             var log = "Error in appraiserLogin";
                             var timestamp = new Date().getTime();
