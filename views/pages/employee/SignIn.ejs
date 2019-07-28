@@ -20,6 +20,17 @@
       font-size: 18px;
     }
   </style>
+      <script type="text/javascript">
+        $(document).ready(function(){
+            var token=localStorage.getItem("employee");
+            if(token){
+                window.location.replace("/employee");
+            }
+            else{
+                
+            }
+        });
+    </script>
   <script type="text/javascript">
   function signin(){
     var url="/employee/auth";
