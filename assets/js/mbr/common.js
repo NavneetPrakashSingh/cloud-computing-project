@@ -25,7 +25,31 @@ $(document).ready(function () {
         $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li>  <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
+    if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
+        if(localStorage.getItem("email")){
+            $.ajax({
+                url: '/mbr/getToken?email='+localStorage.getItem("email"),
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                }
+            })
+                .done(function (data) {
+                    if(data.token){
+                        window.location.replace("/mbr/dashboard?token="+data.token);
+                    }
+                })
+        }else{
+            
+        }
+    }
+
+
     if ($('.identify-page').val() == "dashboard") {
+        if(localStorage.getItem("email")){
+
+        }else{
+            window.location.href = "/mbr/signin";
+        }
         var token = getUrlParameter('token');
         var emailID = localStorage.getItem("email");
         if (emailID) {
@@ -131,6 +155,24 @@ $(document).on("click", "li.dashboard", function () {
 // $(document).on("click", "li.dashboard-re", function () {
 //     window.location.replace("/realEstate");
 // });
+    //here
+    // window.location.replace("/mbr/dashboard");
+    if(localStorage.getItem("email")){
+        $.ajax({
+            url: '/mbr/getToken?email='+localStorage.getItem("email"),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+            }
+        })
+            .done(function (data) {
+                if(data.token){
+                    window.location.replace("/mbr/dashboard?token="+data.token);
+                }
+            })
+    }else{
+        
+    }
+})
 
 $('.signin-email').focus(function () {
     $('.email-message').text('');
@@ -418,3 +460,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
