@@ -1,5 +1,5 @@
 
-module.exports.log = function(log, source) {
+module.exports.log = function(log, location) {
     var timestamp = new Date().getTime();
-    Logger.create({time:timestamp,log:log,source:source}).exec(function(err) {});
+    Logger.create({time:timestamp,log:log, location:location}).exec(function(err) {});
 }

@@ -11,7 +11,7 @@ module.exports = {
             if(err){
                 res.send(500,{error:'Database Error'});
             }
-            res.view('pages/list',{logList:log})
+            res.view('pages/logs',{logList:log})
         });
     }
 
