@@ -22,7 +22,7 @@ $(document).ready(function () {
     }
     if (localStorage.getItem("realEstate")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li> <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
     if ($('.identify-page').val() == "dashboard") {
@@ -79,6 +79,9 @@ $(document).on("click", "li.logout-emp", function () {
 $(document).on("click", "li.logout-re", function () {
     localStorage.clear();
     window.location.replace("/realEstate");
+})
+$(document).on("click", "li.appform", function () {
+    window.location.replace("/realEstate/applicationForm");
 })
 
 
