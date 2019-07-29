@@ -4,7 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-var Logger = require('../../assets/custom/LoggerService');
+// var Logger = require('../../assets/custom/LoggerService');
 var crypto = require('crypto');
 var assert = require('assert');
 var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
@@ -14,13 +14,13 @@ module.exports = {
 
     mbrAddUser: function (req, res) {
 
-        Logger("call: mbrAddUser", "MbrServiceController.mbrAddUser");
+        // Logger("call: mbrAddUser", "MbrServiceController.mbrAddUser");
 
         var name = req.param("name");
         var email = req.param("email");
         var password = req.param("password");
 
-        var cipher = crypto.createCipher(algorithm, key);  
+        var cipher = crypto.createCipher(algorithm, key);
         var password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
         var address = req.param("address");
         var phoneNumber = req.param("phoneNumber");
@@ -87,7 +87,7 @@ module.exports = {
 
     mbrLogin: function (req, res) {
 
-        Logger("call: mbrLogin", "MbrServiceController.mbrLogin");
+        // Logger("call: mbrLogin", "MbrServiceController.mbrLogin");
 
         var email = req.param("email");
         var password = req.param("password");
@@ -97,11 +97,11 @@ module.exports = {
         MbrUser.findOne({ Email: email })
             .exec(function (err, user) {
                 if (err) {
-                    Logger(err, "MbrServiceController.mbrLogin");
+                    // Logger(err, "MbrServiceController.mbrLogin");
                     res.send(err);
                 } else {
                     if (!user) {
-                        Logger("Email is not registered", "MbrServiceController.mbrLogin");
+                        // Logger("Email is not registered", "MbrServiceController.mbrLogin");
                         res.send({ status: "unauthentic", error: "Email is not registered" })
                     } else {
                         console.log(user.Password);
@@ -112,7 +112,7 @@ module.exports = {
                         if (password == decrypted) {
                             res.send({ status: "authentic" })
                         } else {
-                            Logger("Email-Password combination does not exist", "MbrServiceController.mbrLogin");
+                            // Logger("Email-Password combination does not exist", "MbrServiceController.mbrLogin");
                             res.send({ status: "unauthentic", error: "Email-Password combination does not exist" })
                         }
                     }
@@ -123,14 +123,14 @@ module.exports = {
 
     mbrStatus: function (req, res) {
 
-        Logger("call: mbrStatus", "MBR");
+        // Logger("call: mbrStatus", "MBR");
 
         var email = req.param("email");
 
         MbrUser.findOne({ Email: email })
             .exec(function (err, user) {
                 if (err) {
-                    Logger(err, "MBR");
+                    // Logger(err, "MBR");
                     res.send(err);
                 } else {
                     res.send(user)
@@ -140,7 +140,7 @@ module.exports = {
 
     confirmEmploymentStatus: function (req, res) {
 
-        Logger("call: confirmEmploymentStatus", "MBR");
+        // Logger("call: confirmEmploymentStatus", "MBR");
 
         var name = req.param("name");
         var email = req.param("email");
@@ -151,11 +151,11 @@ module.exports = {
         MbrUser.findOne({ id: id })
             .exec(function (err, user) {
                 if (err) {
-                    Logger(err, "MBR");
+                    // Logger(err, "MBR");
                     res.send(err);
                 } else {
                     if (!user) {
-                        Logger("Invalid id", "MBR");
+                        // Logger("Invalid id", "MBR");
                         return res.send({ status: "fail", error: "Invalid id" })
                     }
                     if (name == user.Name && email == user.Email && tenure == user.Tenure && salary == user.Salary) {
@@ -163,7 +163,7 @@ module.exports = {
                             Status: "Application Accepted"
                         }).exec(function (err) {
                             if (err) {
-                                Logger(err, "MBR");
+                                // Logger(err, "MBR");
                                 res.send(err);
                             }
                         })
@@ -183,7 +183,7 @@ module.exports = {
 
     mbrConfirmInsuranceAvailability: function(req, res) {
 
-        Logger("call: mbrConfirmInsuranceAvailability", "MBR");
+        // Logger("call: mbrConfirmInsuranceAvailability", "MBR");
 
         var mortId = req.param("MortId");
         var mlsID = req.param("MlsID");
@@ -195,7 +195,7 @@ module.exports = {
         MbrUser.findOne({ id: mortId })
             .exec(function (err, user) {
                 if (err) {
-                    Logger(err, "MBR");
+                    // Logger(err, "MBR");
                     res.send(err);
                 } else {
                     if (!user || user.MlsID != mlsID || user.Name != applicantName) {
@@ -208,7 +208,7 @@ module.exports = {
                             Deductable: deductable
                         }).exec(function (err) {
                             if (err) {
-                                Logger(err, "MBR");
+                                // Logger(err, "MBR");
                                 res.send(err);
                             }
                         })
@@ -217,7 +217,7 @@ module.exports = {
                             IsInsurable: false
                         }).exec(function (err) {
                             if (err) {
-                                Logger(err, "MBR");
+                                // Logger(err, "MBR");
                                 res.send(err);
                             }
                         })

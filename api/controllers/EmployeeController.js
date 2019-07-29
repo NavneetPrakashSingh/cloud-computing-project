@@ -11,7 +11,7 @@ var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
 var key = 'cloudComputing';
 
 module.exports = {
-    
+
     create:function(req, res, next){
         var name = req.body.name;
         var email = req.body.email;
@@ -27,13 +27,13 @@ module.exports = {
             }
             if (employees.length) {
                 return res.send({ invalid: 'invalid' });
-               
+
             } else {
                 var name = req.body.name;
                 var email = req.body.email;
                 var salary = req.body.salary;
                 var password = req.body.password;
-                var cipher = crypto.createCipher(algorithm, key);  
+                var cipher = crypto.createCipher(algorithm, key);
                 password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
                 var tenure = req.body.tenure;
                 var empID = Math.floor(Math.random() * 200);
@@ -65,13 +65,13 @@ module.exports = {
             if(err){
                   return res.send(500,{error:'Logging Error'});
             }
-            // return res.view("pages/employee/SignIn"); 
+            // return res.view("pages/employee/SignIn");
             return res.send(200,{message:"Profile created successfully!"});
           });
         });
-        
+
     },
-    
+
     // SHOW DATABASE OF COMPANY.
     getEmployeeDB:function(req,res){
       Employee.find({}).exec(function(err,rec){
@@ -104,14 +104,15 @@ module.exports = {
         var request = require('request');
         Employee.find({empID: employeeId}).exec(function(err, result) {
             var data = result[0];
+            console.log("hello my frined",data);
             var name = data.fullName;
             var tenure = data.tenure;
             var salary = data.salary;
             var email = data.email;
-            
+
             if (err) {
             res.send(500, { error: "Database Error when retrieving info about employee with ID " + employeeId});
-            } 
+            }
             var endpointURL = address+"?name="+name+"&email="+email+"&id="+mbrID+"&tenure="+tenure+"&salary="+salary;
             console.log(endpointURL);
             var log = "MBR id = "+mbrID;

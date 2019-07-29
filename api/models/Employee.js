@@ -14,7 +14,7 @@ module.exports = {
     salary:{type:'string'},
     tenure:{type:'string'},
     email:{type:'string', unique: true, required: true}
-   
+
   },
 
 };
