@@ -27,12 +27,16 @@ module.exports.routes = {
   '/mbr/status'  : {controller: 'MbrServiceController', action: 'mbrStatus', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/verify'  : {controller: 'MbrServiceController', action: 'confirmEmploymentStatus', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/confirm-insurance-availability'  : {controller: 'MbrServiceController', action: 'mbrConfirmInsuranceAvailability', locals: {layout: 'layouts/mbr/layout.ejs'}},
+  '/mbr/remove-session' : {controller: 'MbrServiceController',action:'mbrRemoveSession'},
+  '/mbr/getToken' : {controller: 'MbrServiceController',action:'mbrgetToken'},
+
 
   // MBR Application routes:
   '/mbr'           : {view: 'pages/mbr/homepage', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/signup'    : {view: 'pages/mbr/signup', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/signin'    : {view: 'pages/mbr/signin', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/dashboard' : {view: 'pages/mbr/dashboard', locals: {layout: 'layouts/mbr/layout.ejs'}},
+  '/mbr/tokenMismatch' : {view: 'pages/mbr/token', locals: {layout: 'layouts/mbr/layout.ejs'}},
   'Get /mbr/getMBRDB' :
   {
     controller : 'MbrServiceController',

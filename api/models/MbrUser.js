@@ -74,6 +74,12 @@ module.exports = {
       type : "string",
       required: false
     },
+
+    Token: {
+      type : "string",
+      required:false
+    },
+
   },
 
 };
