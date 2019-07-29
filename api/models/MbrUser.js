@@ -74,6 +74,12 @@ module.exports = {
       type : "number",
       required: false
     },
+
+    Token: {
+      type : "string",
+      required:false
+    },
+
   },
 
 };
