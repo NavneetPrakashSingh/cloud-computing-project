@@ -25,7 +25,31 @@ $(document).ready(function () {
         $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li> <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
+    if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
+        if(localStorage.getItem("email")){
+            $.ajax({
+                url: '/mbr/getToken?email='+localStorage.getItem("email"),
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                }
+            })
+                .done(function (data) {
+                    if(data.token){
+                        window.location.replace("/mbr/dashboard?token="+data.token);
+                    }
+                })
+        }else{
+            
+        }
+    }
+
+
     if ($('.identify-page').val() == "dashboard") {
+        if(localStorage.getItem("email")){
+
+        }else{
+            window.location.href = "/mbr/signin";
+        }
         var token = getUrlParameter('token');
         var emailID = localStorage.getItem("email");
         if (emailID) {
@@ -119,7 +143,23 @@ $(document).on("click", "li.appform", function () {
 
 
 $(document).on("click", "li.dashboard", function () {
-    window.location.replace("/mbr/dashboard");
+    //here
+    // window.location.replace("/mbr/dashboard");
+    if(localStorage.getItem("email")){
+        $.ajax({
+            url: '/mbr/getToken?email='+localStorage.getItem("email"),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+            }
+        })
+            .done(function (data) {
+                if(data.token){
+                    window.location.replace("/mbr/dashboard?token="+data.token);
+                }
+            })
+    }else{
+        
+    }
 })
 
 $('.signin-email').focus(function () {
@@ -408,3 +448,4 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+
