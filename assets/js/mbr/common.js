@@ -16,13 +16,13 @@ $(document).ready(function () {
         $('.navbar-nav').append("<li class=\"nav-item logout\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
     }
 
-    if (localStorage.getItem("employee")) {
+    if (localStorage.getItem("Empemail")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-emp\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-emp\"><span class=\"nav-link\">Logout</span></li>");
     }
     if (localStorage.getItem("realEstate")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li> <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li>  <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
     if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
@@ -113,9 +113,9 @@ $(document).on("click", "li.logout", function () {
 })
 
 $(document).on("click", "li.logout-emp", function () {
-  var email = localStorage.getItem("email");
+  var empEmail = localStorage.getItem("Empemail");
   $.ajax({
-      url: '/employee/employeeRemoveSession?email='+email,
+      url: '/employee/employeeRemoveSession?email='+empEmail,
       dataType: 'json',
       beforeSend: function (xhr) {
       }
@@ -128,10 +128,10 @@ $(document).on("click", "li.logout-emp", function () {
       })
 })
 
-$(document).on("click", "li.logout-emp", function () {
-    localStorage.clear();
-    window.location.replace("/employee");
-})
+// $(document).on("click", "li.logout-emp", function () {
+//     localStorage.clear();
+//     window.location.replace("/employee");
+// })
 
 $(document).on("click", "li.logout-re", function () {
     localStorage.clear();
@@ -143,6 +143,18 @@ $(document).on("click", "li.appform", function () {
 
 
 $(document).on("click", "li.dashboard", function () {
+    window.location.replace("/mbr/dashboard");
+});
+
+
+// $(document).on("click", "li.dashboard-emp", function () {
+//     window.location.replace("/employee");
+// });
+
+
+// $(document).on("click", "li.dashboard-re", function () {
+//     window.location.replace("/realEstate");
+// });
     //here
     // window.location.replace("/mbr/dashboard");
     if(localStorage.getItem("email")){

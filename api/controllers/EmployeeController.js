@@ -9,7 +9,8 @@ var crypto = require("crypto");
 var assert = require("assert");
 var algorithm = "aes256"; // or any other algorithm supported by OpenSSL
 var key = "cloudComputing";
-
+var Logger = require('../../assets/custom/LoggerService');
+var controller = "EmployeeController";
 module.exports = {
   create: function(req, res, next) {
     Logger.log("call: create", controller + "create");
@@ -43,6 +44,9 @@ module.exports = {
         }).exec(function(req_err) {
           if (req_err) {
             Logger.log("Database Error", controller + "create");
+          }
+          else{
+            return res.send({ success: "Employee profile successfully created..!!!" });
           }
         });
       }
@@ -113,7 +117,7 @@ module.exports = {
             Logger.log("body,response,enpoint=>"+body+response+endpointURL, controller + "supplyMBRinfo");
             var bodyObject = JSON.parse(body);
             var status = bodyObject.status;
-
+            console.log(status);
             if ("success" == status) {
               // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
               res.send(
@@ -197,7 +201,9 @@ module.exports = {
               res.send({ Status: "success" });
             }
           });
-        return res.send({ empID: data.empID, token: data.token });
+         
+         
+        return res.send({ empID: data.empID, token:token });
       } else {
         Logger.log("Not authentic user", controller + "authenticateUser");
         return res.send({ invalid: "invalid" });
