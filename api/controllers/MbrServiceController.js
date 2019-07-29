@@ -4,7 +4,7 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-var Logger = require('../../assets/custom/LoggerService');
+// var Logger = require('../../assets/custom/LoggerService');
 var crypto = require('crypto');
 var assert = require('assert');
 var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
@@ -23,6 +23,9 @@ module.exports = {
 
         var cipher = crypto.createCipher(algorithm, key);  
         var password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
+
+        var usernameCipher = crypto.createCipher(algorithm, key); 
+        var token = usernameCipher.update(name, 'utf8', 'hex') + usernameCipher.final('hex');
         var address = req.param("address");
         var phoneNumber = req.param("phoneNumber");
         var tenure = req.param("tenure");
@@ -40,7 +43,8 @@ module.exports = {
             Salary: salary,
             Status: "Waiting for employee response",
             MortgageValue: mortgageValue,
-            MlsID: mlsID
+            MlsID: mlsID,
+            Token:token
         })
             .exec(function (err) {
                 if (err) {
@@ -56,7 +60,7 @@ module.exports = {
                         res.send({ error: message, status: "fail" });
                     }
                 } else {
-                    res.send({ status: "Success" });
+                    res.send({ status: "Success",token: token });
                 }
             });
     },
@@ -69,6 +73,35 @@ module.exports = {
         }
       res.view('pages/mbr/listMBR',{recList:rec})
       });
+    },
+
+    mbrRemoveSession: function( req,res){
+        var email = req.param("email");
+        MbrUser.findOne({ Email: email })
+        .exec(function (err, user) {
+            if (err) {
+                res.send(err);
+            } else {
+                if (!user) {
+                    // Logger("Email is not registered", "MbrServiceController.mbrLogin");
+                    res.send({ status: "unauthentic", error: "Invalid email" })
+                } else {
+
+                    //////pending update here
+                    MbrUser.update({ Email: email }).set({
+                        Token: ""
+                    }).exec(function (err) {
+                        if (err) {
+                            Logger(err, "MBR");
+                            res.send(err);
+                        }else{
+                            res.send({Status:"success"});
+                        }
+                    })
+                }
+            }
+
+        })
     },
 
     mbrLogin: function (req, res) {
@@ -94,7 +127,7 @@ module.exports = {
                         var decrypted = decipher.update(user.Password, 'hex', 'utf8') + decipher.final('utf8');
 
                         if (password == decrypted) {
-                            res.send({ status: "authentic" })
+                            res.send({ status: "authentic" , token:token})
                         } else {
                             Logger.log("Email-Password combination does not exist", controller + "mbrLogin");
                             res.send({ status: "unauthentic", error: "Email-Password combination does not exist" })
@@ -104,6 +137,24 @@ module.exports = {
 
             })
     },
+
+
+    mbrgetToken: function (req, res) {
+
+        Logger.log("call: mbrgetToken", controller + "mbrgetToken");
+
+        var email = req.param("email");
+
+        MbrUser.findOne({ Email: email })
+            .exec(function (err, user) {
+                if (err) {
+                    res.send(err);
+                } else {
+                    res.send({"token":user.Token});
+                }
+            })
+    },
+
 
     mbrStatus: function (req, res) {
 
