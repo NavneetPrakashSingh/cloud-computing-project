@@ -87,11 +87,7 @@ module.exports = {
                     res.send({ status: "unauthentic", error: "Invalid email" })
                 } else {
 
-<<<<<<< HEAD
                     //////update here
-=======
-                    //////pending
->>>>>>> d22cf3289294f6a0b27638160be035c04741d801
                     MbrUser.update({ Email: email }).set({
                         Token: ""
                     }).exec(function (err) {
@@ -127,7 +123,6 @@ module.exports = {
                         Logger.log("Email is not registered", controller + "mbrLogin");
                         res.send({ status: "unauthentic", error: "Email is not registered" })
                     } else {
-<<<<<<< HEAD
 
                         // console.log(user);
                         // console.log(user.)
@@ -136,15 +131,6 @@ module.exports = {
 
                         var nameCipher = crypto.createCipher(algorithm, key); 
                         var token = nameCipher.update(user.Email, 'utf8', 'hex') + nameCipher.final('hex');
-=======
-                        var decipher = crypto.createDecipher(algorithm, key);
-                        var decrypted = decipher.update(user.Password, 'hex', 'utf8') + decipher.final('utf8');
-
-                        var usernameCipher = crypto.createCipher(algorithm, key);
-                        var token = usernameCipher.update(user.email, 'utf8', 'hex') + usernameCipher.final('hex');
-
-                        // console.log(decrypted)
->>>>>>> d22cf3289294f6a0b27638160be035c04741d801
 
                         if (password == decrypted) {
 
