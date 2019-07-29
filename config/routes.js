@@ -73,6 +73,11 @@ module.exports.routes = {
     action : 'authenticateUser'
   },
 
+  'Get /employee/employeeGetToken' : {
+    controller : 'EmployeeController',
+    action : 'employeeGetToken'
+  },
+
   'Get /employee/sendInfo' : {
     controller : 'EmployeeController',
     action : 'supplyMBRinfo'

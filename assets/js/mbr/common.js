@@ -39,9 +39,49 @@ $(document).ready(function () {
                     }
                 })
         }else{
-            
+
         }
     }
+
+    if ($('.emp').val() == "emp-signIn" || $('.emp').val() == "emp-signUp") {
+      if(localStorage.getItem("Empemail")){
+          $.ajax({
+              url: '/employee/employeeGetToken?email='+localStorage.getItem("Empemail"),
+              dataType: 'json',
+              beforeSend: function (xhr) {
+              }
+          })
+              .done(function (data) {
+                  if(data.token){
+                      window.location.replace("/employee");
+                  }
+              })
+      }else{
+
+      }
+  }
+  if ($('.emp').val() == "emp-mortgage" ) {
+    if(localStorage.getItem("Empemail")){
+        $.ajax({
+            url: '/employee/employeeGetToken?email='+localStorage.getItem("Empemail"),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+            }
+        })
+            .done(function (data) {
+                if(data.token){
+
+
+                }
+                else{
+                  window.location.replace("/employee");
+                }
+            })
+    }else{
+      window.location.replace("/employee");
+
+    }
+}
 
 
     if ($('.identify-page').val() == "dashboard") {
@@ -170,9 +210,9 @@ $(document).on("click", "li.dashboard", function () {
                 }
             })
     }else{
-        
+
     }
-})
+
 
 $('.signin-email').focus(function () {
     $('.email-message').text('');

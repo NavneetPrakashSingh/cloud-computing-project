@@ -52,6 +52,21 @@ module.exports = {
       }
     });
   },
+  employeeGetToken: function (req, res) {
+
+    Logger.log("call: employeeGetToken", controller + "employeeGetToken");
+
+    var email = req.param("email");
+
+    Employee.findOne({ email: email })
+        .exec(function (err, user) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.send({"token":user.token});
+            }
+        })
+},
 
   // SHOW DATABASE OF COMPANY.
   getEmployeeDB: function(req, res) {
@@ -201,8 +216,8 @@ module.exports = {
               res.send({ Status: "success" });
             }
           });
-         
-         
+
+
         return res.send({ empID: data.empID, token:token });
       } else {
         Logger.log("Not authentic user", controller + "authenticateUser");
