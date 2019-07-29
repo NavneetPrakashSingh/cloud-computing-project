@@ -101,7 +101,7 @@ module.exports = {
                     res.send({ status: "unauthentic", error: "Invalid email" })
                 } else {
 
-                    //////pending update here
+                    //////update here
                     MbrUser.update({ Email: email }).set({
                         Token: ""
                     }).exec(function (err) {
@@ -137,16 +137,28 @@ module.exports = {
                         // Logger("Email is not registered", "MbrServiceController.mbrLogin");
                         res.send({ status: "unauthentic", error: "Email is not registered" })
                     } else {
-                        console.log(user.Password);
+
+                        // console.log(user);
+                        // console.log(user.)
                         var decipher = crypto.createDecipher(algorithm, key);
                         var decrypted = decipher.update(user.Password, 'hex', 'utf8') + decipher.final('utf8');
 
-                        var usernameCipher = crypto.createCipher(algorithm, key); 
-                        var token = usernameCipher.update(user.email, 'utf8', 'hex') + usernameCipher.final('hex');
-
-                        // console.log(decrypted)
+                        var nameCipher = crypto.createCipher(algorithm, key); 
+                        var token = nameCipher.update(user.Email, 'utf8', 'hex') + nameCipher.final('hex');
 
                         if (password == decrypted) {
+
+                            //update value here
+                            MbrUser.update({ Email: email }).set({
+                                Token: token
+                            }).exec(function (err) {
+                                if (err) {
+                                    Logger(err, "MBR");
+                                }else{
+                                    console.log("Token updated successfully");
+                                }
+                            })
+
                             res.send({ status: "authentic" , token:token})
                         } else {
                             // Logger("Email-Password combination does not exist", "MbrServiceController.mbrLogin");
