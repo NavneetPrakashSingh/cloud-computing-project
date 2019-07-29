@@ -22,7 +22,7 @@ $(document).ready(function () {
     }
     if (localStorage.getItem("realEstate")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li> <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
     if ($('.identify-page').val() == "dashboard") {
@@ -89,6 +89,22 @@ $(document).on("click", "li.logout", function () {
 })
 
 $(document).on("click", "li.logout-emp", function () {
+  var email = localStorage.getItem("email");
+  $.ajax({
+      url: '/employee/employeeRemoveSession?email='+email,
+      dataType: 'json',
+      beforeSend: function (xhr) {
+      }
+  })
+      .done(function (data) {
+          if(data.Status =="success"){
+              localStorage.clear();
+              window.location.replace("/employee");
+          }
+      })
+})
+
+$(document).on("click", "li.logout-emp", function () {
     localStorage.clear();
     window.location.replace("/employee");
 })
@@ -96,6 +112,9 @@ $(document).on("click", "li.logout-emp", function () {
 $(document).on("click", "li.logout-re", function () {
     localStorage.clear();
     window.location.replace("/realEstate");
+})
+$(document).on("click", "li.appform", function () {
+    window.location.replace("/realEstate/applicationForm");
 })
 
 
@@ -349,9 +368,9 @@ $('.signup-button').click(function () {
     if (validSignupEmail == true && validSignupPassword == true && validSignupAddress == true && validSignupName && validSignupPhoneNumber && validSignupSalary && validSignupTenure && validSignupMortgageValue) {
         // var encryptedPassword = CryptoJS.AES.encrypt($('.signup-password').val(), "cloud computing");
         $.ajax({
-            url: 'http://localhost:1337/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() + 
-                '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' + 
-                $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+ 
+            url: 'http://localhost:1337/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
+                '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' +
+                $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+
                 '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=' + $('.signup-property-id').val(),
             dataType: 'json',
             beforeSend: function (xhr) {

@@ -63,6 +63,11 @@ module.exports.routes = {
     action : 'create'
   },
 
+  'Get /employee/employeeRemoveSession' : {
+    controller: 'EmployeeController',
+    action : 'employeeRemoveSession'
+  },
+
   'Post /employee/auth' : {
     controller : 'EmployeeController',
     action : 'authenticateUser'
@@ -70,7 +75,7 @@ module.exports.routes = {
 
   'Get /employee/sendInfo' : {
     controller : 'EmployeeController',
-    action : 'supplyMBRinfo'    
+    action : 'supplyMBRinfo'
   },
 
   'Get /employee/getEmployeeDB' : {

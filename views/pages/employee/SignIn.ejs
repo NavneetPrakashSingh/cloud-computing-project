@@ -20,6 +20,17 @@
       font-size: 18px;
     }
   </style>
+      <script type="text/javascript">
+        $(document).ready(function(){
+            var token=localStorage.getItem("employee");
+            if(token){
+                window.location.replace("/employee");
+            }
+            else{
+
+            }
+        });
+    </script>
   <script type="text/javascript">
   function signin(){
     var url="/employee/auth";
@@ -33,7 +44,7 @@
                   success:function(result){
                     console.log(result);
                     if(result.invalid){
-                       alert("Wrong Credentials...please enter correct email and password credentials..!!!") 
+                       alert("Wrong Credentials...please enter correct email and password credentials..!!!")
                     }else{
                       //localStorage.setItem("loggedin",true);
                       // $('#mainDiv').html('');
@@ -41,24 +52,24 @@
                       //alert(result.empID);
                       localStorage.setItem("employee", "In");
                       var empID=result.empID;
-                      window.location.href="/employee/MortgageInfoSupply?empID="+empID;
+                      window.location.href="/employee/MortgageInfoSupply?empID="+empID+"&token="+result.token;
                     }
-             
+
                   },
                   error:function(error){
                     console.log("Error ${error}")
                   }
                 });
-                
+
   }
   </script>
-  
+
   <div class="container-fluid" id="mainDiv">
     <div class="col-lg-4">
-  
+
     </div>
       <!-- <form action="/employee/auth" method="POST"> -->
-  
+
     <div class="col-lg-4" id="sign-in-form">
      <div>
        <center><h1>Login</h1></center>
@@ -67,7 +78,7 @@
       <label for="email">Email:</label>
       <input type="text" class="form-control" id="email" required=true
        name="empID" placeholder="Enter Email">
-  
+
     </div>
     <div class="form-group">
       <label for="password">Password</label>
@@ -75,7 +86,7 @@
     </div>
     <center><button type="button" class="btn btn-primary" onclick="signin()" id="btn">Log-in
     </div>
-  
+
   </button></center>
   <!-- </form> -->
   <div class="col-lg-4">
@@ -87,5 +98,4 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-  
-  
+

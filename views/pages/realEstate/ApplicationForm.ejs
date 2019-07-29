@@ -1,6 +1,17 @@
 <html>
   <body>
-     
+      <script type="text/javascript">
+        $(document).ready(function(){
+
+            var token=localStorage.getItem("realEstate");
+            if(!token){
+                window.location.replace("/realEstate");
+            }
+            else{
+
+            }
+        });
+    </script>
     <div class="container">
       <div class="card">
         <div class="card-header">Appraisal Application</div>
@@ -9,7 +20,7 @@
             <div class="form-group">
               <label> MortID: </label>
               <input type="string" id="MortID" name="MortID" class="form-control" required>
-            </div>  
+            </div>
             <div class="form-group">
               <label> MlsID: </label>
               <input type="text" id="MlsID" name="MlsID" class="form-control" required>
@@ -41,6 +52,9 @@
             {
                 alert(data.error);
             }
+            else if(data.status=="Please provide correct values."){
+              alert("Please provide correct values.");
+            }
             else
             {
                 alert("Your application has been submited.");
@@ -48,5 +62,5 @@
             }
         })
         .catch(error => console.log('error is', error));
-    }); 
+    });
 </script>
