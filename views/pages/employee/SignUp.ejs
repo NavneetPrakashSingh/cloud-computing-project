@@ -21,15 +21,15 @@
         }
       </style>
        <script type="text/javascript">
-        $(document).ready(function(){
-            var token=localStorage.getItem("employee");
-            if(token){
-                window.location.replace("/employee");
-            }
-            else{
+        // $(document).ready(function(){
+        //     var token=localStorage.getItem("employee");
+        //     if(token){
+        //         window.location.replace("/employee");
+        //     }
+        //     else{
                 
-            }
-        });
+        //     }
+        // });
     </script>
     <script type="text/javascript">
 
@@ -60,7 +60,7 @@
                     if(result.invalid){
                        alert('Employee already exists!') 
                     }else{
-                      alert(result.message);
+                      alert(result.success);
                       window.location.href = "/employee/SignIn";
                     }
              
