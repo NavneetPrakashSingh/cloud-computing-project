@@ -1,6 +1,17 @@
 <html>
   <body>
-     
+      <script type="text/javascript">
+        $(document).ready(function(){
+
+            var token=localStorage.getItem("realEstate");
+            if(!token){
+                window.location.replace("/realEstate");
+            }
+            else{
+                
+            }
+        });
+    </script>
     <div class="container">
       <div class="card">
         <div class="card-header">Appraisal Application</div>
