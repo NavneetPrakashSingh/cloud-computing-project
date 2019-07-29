@@ -11,7 +11,7 @@ module.exports = {
     id: { type: 'string',autoIncrement: true },
     log: { type: 'string'},
     time: { type: 'string'},
-    server: { type: 'string'},
+    location: { type: 'string'},
   },
 
 };

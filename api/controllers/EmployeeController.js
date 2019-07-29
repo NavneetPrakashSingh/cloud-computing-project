@@ -9,10 +9,15 @@ var crypto = require('crypto');
 var assert = require('assert');
 var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
 var key = 'cloudComputing';
+var Logger = require('../../assets/custom/LoggerService');
+var controller = "EmployeeController.";
 
 module.exports = {
 
     create:function(req, res, next){
+
+        Logger.log("call: create", controller + "create");
+
         var name = req.body.name;
         var email = req.body.email;
         Employee.find({
@@ -46,61 +51,42 @@ module.exports = {
                     password:password
                }).exec(function(req_err) {
                 if (req_err) {
-                  var log = "Database Error";
-                  var timestamp = new Date().getTime();
-                  var server = "Employee"
-                  Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                      if(err){
-                          return res.status(500).send({error:'Logging Error'});
-                      }
-                      return res.status(500).send({ error: req_err });
-                  });
+                  Logger.log("Database Error", controller + "create");
                 }
             });
         }
-           var log = "Employer profile completed.";
-          var timestamp = new Date().getTime();
-          var server = "Company"
-          Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-            if(err){
-                  return res.send(500,{error:'Logging Error'});
-            }
-            // return res.view("pages/employee/SignIn");
-            return res.send(200,{message:"Profile created successfully!"});
-          });
+           Logger.log("Employer profile completed", controller + "create");
         });
-
     },
 
     // SHOW DATABASE OF COMPANY.
     getEmployeeDB:function(req,res){
-      Employee.find({}).exec(function(err,rec){
 
-        if(err){
-            res.send(500,{error:'Database Error'});
-        }
-       res.view('pages/employee/listCompany',{recList:rec})
-      });
-    },
+        Logger.log("call: getEmployeeDB", controller + "getEmployeeDB");
 
-    MBRcall: function(req, res) {
-    var log = "Checking for values in the JSON response from the company server";
-        var timestamp = new Date().getTime();
-        var server = "MBR"
-        Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                    if(err){
+        Employee.find({}).exec(function(err,rec){
+
+            if(err){
                 res.send(500,{error:'Database Error'});
             }
+        res.view('pages/employee/listCompany',{recList:rec})
         });
     },
 
+    MBRcall: function(req, res) {
+
+        Logger.log("call: MBRcall", controller + "MBRcall");
+
+        Logger.log("Checking for values in the JSON response from the company server", controller + "MBRcall");
+    },
+
     supplyMBRinfo:function(req, res) {
-        console.log("inside supply MBR infor");
+
+        Logger.log("call: supplyMBRinfo", controller + "supplyMBRinfo");
+
         var employeeId = req.param('empID');
         var address = req.param('address');
         var mbrID = req.param('mbrID');
-        console.log(mbrID);
-        console.log(address);
         var request = require('request');
         Employee.find({empID: employeeId}).exec(function(err, result) {
             var data = result[0];
@@ -111,41 +97,18 @@ module.exports = {
             var email = data.email;
 
             if (err) {
-            res.send(500, { error: "Database Error when retrieving info about employee with ID " + employeeId});
+                res.send(500, { error: "Database Error when retrieving info about employee with ID " + employeeId});
             }
             var endpointURL = address+"?name="+name+"&email="+email+"&id="+mbrID+"&tenure="+tenure+"&salary="+salary;
-            console.log(endpointURL);
-            var log = "MBR id = "+mbrID;
-            var timestamp = new Date().getTime();
-            var server = "Company";
-            // Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-            //             if(err){
-            //         res.send(500,{error:'Database Error'});
-            //     }
-            // })
             request.get({
                 url: endpointURL
             },function(error, response, body) {
 
                 if (error) {
-                var log = "Something went wrong";
-                var timestamp = new Date().getTime();
-                var server = "Company"
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                    if(err){
-                        res.send(500,{error:'Database Error'});
-                    }
-                });
+                    Logger.log("Something went wrong calling url" + endpointURL, controller + "supplyMBRinfo");
                 }
                 else {
-                var log = "body,response,enpoint=>"+body+response+endpointURL;
-                var timestamp = new Date().getTime();
-                var server = "Company"
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                                    if(err){
-                        res.send(500,{error:'Database Error'});
-                    }
-                });
+                Logger.log("body,response,enpoint=>"+body+response+endpointURL, controller + "supplyMBRinfo");
 
                 var bodyObject = JSON.parse(body);
                 var status = bodyObject.status;
@@ -164,18 +127,14 @@ module.exports = {
     },
 
     authenticateUser: function (req, res) {
+
+        Logger.log("call: authenticateUser", controller + "authenticateUser");
+
         var password=req.body.password;
         var email = req.body.email;
         Employee.find({email: email}).exec(function(err, result) {
             if (err) {
-                var log = "Database Error when retrieving info about employee with ID "
-                var timestamp = new Date().getTime();
-                var server = "Company"
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                    if(err){
-                        res.send(500,{error:'Logging Error'});
-                    }
-                });
+                Logger.log("Database Error when retrieving info about employee with ID ", controller + "authenticateUser");
                 res.send(500, { error: "Database Error when retrieving info about employee with email " + email});
             }
             if(0 == result.length) {
@@ -192,28 +151,11 @@ module.exports = {
             var decipher = crypto.createDecipher(algorithm, key);
             var decrypted = decipher.update(data.password, 'hex', 'utf8') + decipher.final('utf8');
             if(password === decrypted){
-                var log = "Authentic user."
-                var timestamp = new Date().getTime();
-                var server = "Company"
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                                    if(err){
-                        res.send(500,{error:'Logging Error'});
-                    }
-                });
-                //res.locals.layout = "layouts/employee/layout.ejs";
-                //res.view('pages/employee/MortgageInfoSupply',{empID:data.empID});
+                Logger.log("Authentic user", controller + "authenticateUser");
                 return res.send({empID:data.empID});
-
             }
             else{
-                var log = "Not authentic user."
-                var timestamp = new Date().getTime();
-                var server = "Company"
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                    if(err){
-                        res.send(500,{error:'Database Error'});
-                    }
-                });
+                Logger.log("Not authentic user", controller + "authenticateUser");
                 return res.send({ invalid: 'invalid' });
             }
         })
