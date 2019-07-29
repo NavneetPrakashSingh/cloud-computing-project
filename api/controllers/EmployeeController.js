@@ -12,6 +12,8 @@ var key = "cloudComputing";
 
 module.exports = {
   create: function(req, res, next) {
+    Logger.log("call: create", controller + "create");
+
     var name = req.body.name;
     var email = req.body.email;
     Employee.find({
@@ -40,37 +42,17 @@ module.exports = {
           password: password
         }).exec(function(req_err) {
           if (req_err) {
-            var log = "Database Error";
-            var timestamp = new Date().getTime();
-            var server = "Employee";
-            Logger.create({ time: timestamp, log: log, server: server }).exec(
-              function(err) {
-                if (err) {
-                  return res.status(500).send({ error: "Logging Error" });
-                }
-                return res.status(500).send({ error: req_err });
-              }
-            );
+            Logger.log("Database Error", controller + "create");
           }
         });
       }
-      var log = "Employer profile completed.";
-      var timestamp = new Date().getTime();
-      var server = "Company";
-      // Logger.create({ time: timestamp, log: log, server: server }).exec(
-      //   function(err) {
-      //     if (err) {
-      //       return res.send(500, { error: "Logging Error" });
-      //     }
-      //     // return res.view("pages/employee/SignIn");
-      //     return res.send(200, { message: "Profile created successfully!" });
-      //   }
-      // );
     });
   },
 
   // SHOW DATABASE OF COMPANY.
   getEmployeeDB: function(req, res) {
+    Logger.log("call: getEmployeeDB", controller + "getEmployeeDB");
+
     Employee.find({}).exec(function(err, rec) {
       if (err) {
         res.send(500, { error: "Database Error" });
@@ -80,30 +62,22 @@ module.exports = {
   },
 
   MBRcall: function(req, res) {
-    var log =
-      "Checking for values in the JSON response from the company server";
-    var timestamp = new Date().getTime();
-    var server = "MBR";
-    Logger.create({ time: timestamp, log: log, server: server }).exec(function(
-      err
-    ) {
-      if (err) {
-        res.send(500, { error: "Database Error" });
-      }
-    });
+    Logger.log("call: MBRcall", controller + "MBRcall");
+
+    Logger.log(
+      "Checking for values in the JSON response from the company server",
+      controller + "MBRcall"
+    );
   },
 
   supplyMBRinfo: function(req, res) {
-    // console.log("inside supply MBR infor");
+    Logger.log("call: supplyMBRinfo", controller + "supplyMBRinfo");
     var employeeId = req.param("empID");
     var address = req.param("address");
     var mbrID = req.param("mbrID");
-    // console.log(mbrID);
-    // console.log(address);
     var request = require("request");
     Employee.find({ empID: employeeId }).exec(function(err, result) {
       var data = result[0];
-      // console.log("hello my frined", data);
       var name = data.fullName;
       var tenure = data.tenure;
       var salary = data.salary;
@@ -128,43 +102,15 @@ module.exports = {
         tenure +
         "&salary=" +
         salary;
-      // console.log(endpointURL);
-      var log = "MBR id = " + mbrID;
-      var timestamp = new Date().getTime();
-      var server = "Company";
-      // Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-      //             if(err){
-      //         res.send(500,{error:'Database Error'});
-      //     }
-      // })
       request.get(
         {
           url: endpointURL
         },
         function(error, response, body) {
           if (error) {
-            var log = "Something went wrong";
-            var timestamp = new Date().getTime();
-            var server = "Company";
-            Logger.create({ time: timestamp, log: log, server: server }).exec(
-              function(err) {
-                if (err) {
-                  res.send(500, { error: "Database Error" });
-                }
-              }
-            );
+            Logger.log("Something went wrong calling url" + endpointURL, controller + "supplyMBRinfo");
           } else {
-            var log = "body,response,enpoint=>" + body + response + endpointURL;
-            var timestamp = new Date().getTime();
-            var server = "Company";
-            Logger.create({ time: timestamp, log: log, server: server }).exec(
-              function(err) {
-                if (err) {
-                  res.send(500, { error: "Database Error" });
-                }
-              }
-            );
-
+            Logger.log("body,response,enpoint=>"+body+response+endpointURL, controller + "supplyMBRinfo");
             var bodyObject = JSON.parse(body);
             var status = bodyObject.status;
 
@@ -214,6 +160,7 @@ module.exports = {
   },
 
   authenticateUser: function(req, res) {
+    Logger.log("call: authenticateUser", controller + "authenticateUser");
     var password = req.body.password;
     var email = req.body.email;
     var usernameCipher = crypto.createCipher(algorithm, key);
@@ -221,16 +168,7 @@ module.exports = {
       usernameCipher.update(email, "utf8", "hex") + usernameCipher.final("hex");
     Employee.find({ email: email }).exec(function(err, result) {
       if (err) {
-        var log = "Database Error when retrieving info about employee with ID ";
-        var timestamp = new Date().getTime();
-        var server = "Company";
-        Logger.create({ time: timestamp, log: log, server: server }).exec(
-          function(err) {
-            if (err) {
-              res.send(500, { error: "Logging Error" });
-            }
-          }
-        );
+        Logger.log("Database Error when retrieving info about employee with ID ", controller + "authenticateUser");
         res.send(500, {
           error:
             "Database Error when retrieving info about employee with email " +
@@ -242,42 +180,26 @@ module.exports = {
       } else {
         var data = result[0];
       }
-
-      // console.log(data.password);
       var decipher = crypto.createDecipher(algorithm, key);
       var decrypted =
         decipher.update(data.password, "hex", "utf8") + decipher.final("utf8");
       if (password === decrypted) {
+        Logger.log("Authentic user", controller + "authenticateUser");
         // code for the token to the DB.
-        // console.log('Entered here.',data)
-         Employee.update({ email: data.email })
+        Employee.update({ email: data.email })
           .set({
             token: token
           })
           .toPromise(function(err) {
-        // console.log('Entered here in ERR .')
-
             if (err) {
-              Logger(err, "Employee");
               res.send(err);
             } else {
-        // console.log('Entered here in elsecase .')
               res.send({ Status: "success" });
             }
-          })
-        // console.log('FInsihed!',data.token,"example",token)
-        return res.send({ empID: data.empID,token:data.token });
+          });
+        return res.send({ empID: data.empID, token: data.token });
       } else {
-        var log = "Not authentic user.";
-        var timestamp = new Date().getTime();
-        var server = "Company";
-        Logger.create({ time: timestamp, log: log, server: server }).exec(
-          function(err) {
-            if (err) {
-              res.send(500, { error: "Database Error" });
-            }
-          }
-        );
+        Logger.log("Not authentic user", controller + "authenticateUser");
         return res.send({ invalid: "invalid" });
       }
     });
