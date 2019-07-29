@@ -4,11 +4,11 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
-// var Logger = require('../../assets/custom/LoggerService');
 var crypto = require('crypto');
 var assert = require('assert');
 var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
 var key = 'cloudComputing';
+var Logger = require('../../assets/custom/LoggerService');
 var controller = "MbrServiceController.";
 
 module.exports = {
