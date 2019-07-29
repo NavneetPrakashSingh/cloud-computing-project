@@ -36,7 +36,14 @@
         <div class="motgage-value-message"></div>
 
         <label for="property-id" class="sr-only">Property ID</label>
-        <input type="text" id="property-id" class="form-control margin-top-2 signup-property-id" placeholder="Enter Property ID" required autofocus>
+        <!--<input type="text" id="property-id" class="form-control margin-top-2 signup-property-id" placeholder="Enter Property ID" required autofocus>-->
+        <select required>
+          <% Properties.forEach(function(property){ %>
+            <option value=<%= property.id %>><%= property.Name %></option>
+    
+            </option>
+          <% }) %>  
+        </select>
         <div class="property-id-message"></div>
 
         <button class="btn btn-lg btn-primary btn-block margin-top-2 signup-button" type="submit">Apply</button>
