@@ -16,16 +16,81 @@ $(document).ready(function () {
         $('.navbar-nav').append("<li class=\"nav-item logout\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
     }
 
-    if (localStorage.getItem("employee")) {
+    if (localStorage.getItem("Empemail")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-emp\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-emp\"><span class=\"nav-link\">Logout</span></li>");
     }
     if (localStorage.getItem("realEstate")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li>  <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
+    if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
+        if(localStorage.getItem("email")){
+            $.ajax({
+                url: '/mbr/getToken?email='+localStorage.getItem("email"),
+                dataType: 'json',
+                beforeSend: function (xhr) {
+                }
+            })
+                .done(function (data) {
+                    if(data.token){
+                        window.location.replace("/mbr/dashboard?token="+data.token);
+                    }
+                })
+        }else{
+
+        }
+    }
+
+    if ($('.emp').val() == "emp-signIn" || $('.emp').val() == "emp-signUp") {
+      if(localStorage.getItem("Empemail")){
+          $.ajax({
+              url: '/employee/employeeGetToken?email='+localStorage.getItem("Empemail"),
+              dataType: 'json',
+              beforeSend: function (xhr) {
+              }
+          })
+              .done(function (data) {
+                  if(data.token){
+                      window.location.replace("/employee");
+                  }
+              })
+      }else{
+
+      }
+  }
+  if ($('.emp').val() == "emp-mortgage" ) {
+    if(localStorage.getItem("Empemail")){
+        $.ajax({
+            url: '/employee/employeeGetToken?email='+localStorage.getItem("Empemail"),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+            }
+        })
+            .done(function (data) {
+                if(data.token){
+
+
+                }
+                else{
+                  window.location.replace("/employee");
+                }
+            })
+    }else{
+      window.location.replace("/employee");
+
+    }
+}
+
+
     if ($('.identify-page').val() == "dashboard") {
+        if(localStorage.getItem("email")){
+
+        }else{
+            window.location.href = "/mbr/signin";
+        }
+        var token = getUrlParameter('token');
         var emailID = localStorage.getItem("email");
         if (emailID) {
             $.ajax({
@@ -36,27 +101,31 @@ $(document).ready(function () {
                 }
             })
                 .done(function (data) {
-                    $('.dashboard-mortgage-id').text(data.id);
-                    $('.dashboard-name').text(data.Name);
-                    $('.dashboard-email').text(data.Email);
-                    $('.dashboard-address').text(data.Address);
-                    $('.dashboard-phone').text(data.Phone_Number);
-                    $('.dashboard-salary').text(data.Salary);
-                    $('.dashboard-tenure').text(data.Salary);
-                    $('.dashboard-status').text(data.Status);
-                    $('.dashboard-property-id').text(data.MlsID);
-                    if(data.InsuredValue && data.Deductable) {
-                        $('.dashboard-is-insured').text("Insurance company has approved your application.");
-                        $('#user-info').append("<div class='col-md-6'>Insured Value: <span class='dashboard-insured-value'></span> </div>");
-                        $('.dashboard-insured-value').text(data.InsuredValue);
-                        $('#user-info').append("<div class='col-md-6'>Deductable: <span class='dashboard-deductable'></span> </div>");
-                        $('.dashboard-deductable').text(data.Deductable);
-                    } else {
-                        if(data.IsInsurable) {
-                            $('.dashboard-is-insured').text("Waiting for insurance company decision.");
+                    if(data.Token == token){
+                        $('.dashboard-mortgage-id').text(data.id);
+                        $('.dashboard-name').text(data.Name);
+                        $('.dashboard-email').text(data.Email);
+                        $('.dashboard-address').text(data.Address);
+                        $('.dashboard-phone').text(data.Phone_Number);
+                        $('.dashboard-salary').text(data.Salary);
+                        $('.dashboard-tenure').text(data.Salary);
+                        $('.dashboard-status').text(data.Status);
+                        $('.dashboard-property-id').text(data.MlsID);
+                        if(data.InsuredValue && data.Deductable) {
+                            $('.dashboard-is-insured').text("Insurance company has approved your application.");
+                            $('#user-info').append("<div class='col-md-6'>Insured Value: <span class='dashboard-insured-value'></span> </div>");
+                            $('.dashboard-insured-value').text(data.InsuredValue);
+                            $('#user-info').append("<div class='col-md-6'>Deductable: <span class='dashboard-deductable'></span> </div>");
+                            $('.dashboard-deductable').text(data.Deductable);
                         } else {
-                            $('.dashboard-is-insured').text("Insurance company has declined your application.");
+                            if(data.IsInsurable) {
+                                $('.dashboard-is-insured').text("Waiting for insurance company decision.");
+                            } else {
+                                $('.dashboard-is-insured').text("Insurance company has declined your application.");
+                            }
                         }
+                    }else{
+                        window.location.href="/mbr/tokenMismatch";
                     }
                 })
         }
@@ -67,24 +136,83 @@ $(document).ready(function () {
 });
 
 $(document).on("click", "li.logout", function () {
-    localStorage.clear();
-    window.location.replace("/mbr");
+    var email = localStorage.getItem("email");
+    $.ajax({
+        url: '/mbr/remove-session?email='+email,
+        dataType: 'json',
+        beforeSend: function (xhr) {
+
+        }
+    })
+        .done(function (data) {
+            if(data.Status =="success"){
+                localStorage.clear();
+                window.location.replace("/mbr");
+            }
+        })
 })
 
 $(document).on("click", "li.logout-emp", function () {
-    localStorage.clear();
-    window.location.replace("/employee");
+  var empEmail = localStorage.getItem("Empemail");
+  $.ajax({
+      url: '/employee/employeeRemoveSession?email='+empEmail,
+      dataType: 'json',
+      beforeSend: function (xhr) {
+      }
+  })
+      .done(function (data) {
+          if(data.Status =="success"){
+              localStorage.clear();
+              window.location.replace("/employee");
+          }
+      })
 })
+
+// $(document).on("click", "li.logout-emp", function () {
+//     localStorage.clear();
+//     window.location.replace("/employee");
+// })
 
 $(document).on("click", "li.logout-re", function () {
     localStorage.clear();
     window.location.replace("/realEstate");
 })
+$(document).on("click", "li.appform", function () {
+    window.location.replace("/realEstate/applicationForm");
+})
 
 
 $(document).on("click", "li.dashboard", function () {
     window.location.replace("/mbr/dashboard");
-})
+});
+
+
+// $(document).on("click", "li.dashboard-emp", function () {
+//     window.location.replace("/employee");
+// });
+
+
+// $(document).on("click", "li.dashboard-re", function () {
+//     window.location.replace("/realEstate");
+// });
+    //here
+    // window.location.replace("/mbr/dashboard");
+    if(localStorage.getItem("email")){
+        $.ajax({
+            url: '/mbr/getToken?email='+localStorage.getItem("email"),
+            dataType: 'json',
+            beforeSend: function (xhr) {
+            }
+        })
+            .done(function (data) {
+                if(data.token){
+                    window.location.replace("/mbr/dashboard?token="+data.token);
+                }
+            })
+    }else{
+
+    }
+
 
 $('.signin-email').focus(function () {
     $('.email-message').text('');
@@ -140,7 +268,8 @@ $('.signin-button').click(function () {
                 var response = JSON.parse(jsonResponse);
                 if (response.status == "authentic") {
                     localStorage.setItem("email", $('.signin-email').val());
-                    window.location.replace("/mbr/dashboard");
+                    localStorage.setItem("token", response.token);
+                    window.location.replace("/mbr/dashboard?token="+response.token);
                 } else {
                     alert("Username and password combination is not correct");
                 }
@@ -331,9 +460,9 @@ $('.signup-button').click(function () {
     if (validSignupEmail == true && validSignupPassword == true && validSignupAddress == true && validSignupName && validSignupPhoneNumber && validSignupSalary && validSignupTenure && validSignupMortgageValue) {
         // var encryptedPassword = CryptoJS.AES.encrypt($('.signup-password').val(), "cloud computing");
         $.ajax({
-            url: 'http://localhost:1337/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() + 
-                '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' + 
-                $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+ 
+            url: 'http://localhost:1337/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
+                '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' +
+                $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+
                 '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=' + $('.signup-property-id').val(),
             dataType: 'json',
             beforeSend: function (xhr) {
@@ -346,7 +475,8 @@ $('.signup-button').click(function () {
                 if (response.status == "Success") {
                     $('.signup-button').text("Sign Up");
                     localStorage.setItem("email", $('.signup-email').val());
-                    window.location.replace("/mbr/dashboard");
+                    localStorage.setItem("token", response.token);
+                    window.location.replace("/mbr/dashboard?token="+response.token);
                 } else {
                     alert(response.error);
                 }
@@ -355,3 +485,19 @@ $('.signup-button').click(function () {
         alert("One of the values is not validated properly, please check again!");
     }
 })
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+};
+

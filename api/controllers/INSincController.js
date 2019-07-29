@@ -5,12 +5,13 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 var Logger = require('../../assets/custom/LoggerService');
+var controller = "INSincController.";
 
 module.exports = {
   
     checkInsuranceAvailability: function(req, res) {
 
-        Logger("call: mbrAddcheckInsuranceAvailabilityUser", "INSincController.checkInsuranceAvailability");
+        Logger.log("call: checkInsuranceAvailability", controller + "checkInsuranceAvailability");
 
         var mortId = req.param("MortId");
         var mlsID = req.param("MlsID");
@@ -36,7 +37,7 @@ module.exports = {
                 url: url
                 }, function(error) {
                 if (error) {
-                    Logger(error, "INSincController.checkInsuranceAvailability");
+                    Logger.log(error, controller + "checkInsuranceAvailability");
                 } else {
                     return res.send({ status: "declined", reason: "Appraisal value is less than 50000." });
                 }
@@ -48,7 +49,6 @@ module.exports = {
         var deductable = insuredValue*0.02;
 
         // https://stackoverflow.com/questions/30523872/make-a-http-request-in-your-controller-sails-js
-
         url = 'http://localhost:1337/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + true + '&insuredValue=' + insuredValue + '&deductable=' + deductable + 
                 '&applicantName=' + applicantName;
@@ -57,7 +57,7 @@ module.exports = {
                 url: url
                 }, function(error) {
                 if (error) {
-                    Logger(error, "INSincController.checkInsuranceAvailability");
+                    Logger.log(error, controller + "checkInsuranceAvailability");
                 } else {
                     return res.send({ status: "approved", reason: "Appraisal value is higher than 50000." });
                 }

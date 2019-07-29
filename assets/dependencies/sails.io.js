@@ -443,7 +443,7 @@ return new(b[["Active"].concat("Object").join("X")])("Microsoft.XMLHTTP")}catch(
     }//</LoggerFactory>
 
     // Create a private logger instance
-    var consolog = LoggerFactory();
+    var consolog = Factory();
     consolog.noPrefix = LoggerFactory({
       prefix: false
     });

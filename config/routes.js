@@ -27,12 +27,16 @@ module.exports.routes = {
   '/mbr/status'  : {controller: 'MbrServiceController', action: 'mbrStatus', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/verify'  : {controller: 'MbrServiceController', action: 'confirmEmploymentStatus', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/confirm-insurance-availability'  : {controller: 'MbrServiceController', action: 'mbrConfirmInsuranceAvailability', locals: {layout: 'layouts/mbr/layout.ejs'}},
+  '/mbr/remove-session' : {controller: 'MbrServiceController',action:'mbrRemoveSession'},
+  '/mbr/getToken' : {controller: 'MbrServiceController',action:'mbrgetToken'},
+
 
   // MBR Application routes:
   '/mbr'           : {view: 'pages/mbr/homepage', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/signup'    : {controller:'MbrServiceController', action: 'fetchApplication'},
   '/mbr/signin'    : {view: 'pages/mbr/signin', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/dashboard' : {view: 'pages/mbr/dashboard', locals: {layout: 'layouts/mbr/layout.ejs'}},
+  '/mbr/tokenMismatch' : {view: 'pages/mbr/token', locals: {layout: 'layouts/mbr/layout.ejs'}},
   'Get /mbr/getMBRDB' :
   {
     controller : 'MbrServiceController',
@@ -59,14 +63,24 @@ module.exports.routes = {
     action : 'create'
   },
 
+  'Get /employee/employeeRemoveSession' : {
+    controller: 'EmployeeController',
+    action : 'employeeRemoveSession'
+  },
+
   'Post /employee/auth' : {
     controller : 'EmployeeController',
     action : 'authenticateUser'
   },
 
+  'Get /employee/employeeGetToken' : {
+    controller : 'EmployeeController',
+    action : 'employeeGetToken'
+  },
+
   'Get /employee/sendInfo' : {
     controller : 'EmployeeController',
-    action : 'supplyMBRinfo'    
+    action : 'supplyMBRinfo'
   },
 
   'Get /employee/getEmployeeDB' : {

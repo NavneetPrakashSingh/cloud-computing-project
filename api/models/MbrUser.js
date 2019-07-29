@@ -12,7 +12,7 @@ module.exports = {
       type : "string",
       required:true
     },
-    
+
     Email: {
       type : "string",
       required:true,
@@ -30,17 +30,17 @@ module.exports = {
     },
 
     Phone_Number: {
-      type : "number",
+      type : "string",
       required:true
     },
 
     Salary: {
-      type:"number",
+      type:"string",
       required:true
     },
 
     Tenure: {
-      type:"number",
+      type:"string",
       required:true
     },
 
@@ -50,7 +50,7 @@ module.exports = {
     },
 
     MortgageValue: {
-      type : "number",
+      type : "string",
       required:true
     },
 
@@ -66,14 +66,20 @@ module.exports = {
     },
 
     InsuredValue: {
-      type : "number",
+      type : "string",
       required: false
     },
 
     Deductable: {
-      type : "number",
+      type : "string",
       required: false
     },
+
+    Token: {
+      type : "string",
+      required:false
+    },
+
   },
 
 };

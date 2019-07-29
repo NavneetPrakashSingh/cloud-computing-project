@@ -25,7 +25,7 @@
                     <th>Property ID</th>
                     <th>Value</th>
                 </tr>
-            </thead>    
+            </thead>
             <tbody>
                 <% Appraisals.forEach(function(Appraisal){ %>
                     <tr>
@@ -34,7 +34,7 @@
                             <td><input type="text" id="applicantName" name="applicantName" value=<%= Appraisal.fullName %> readonly></td>
                             <td><input type="text" id="MlsID" name="MlsID" value=<%= Appraisal.MlsID %> readonly></td>
                             <td><input type="number" id="appraisalValue" name="appraisalValue" required></td>
-                            <td><input type="button" onclick=callInsurance(this.form) value="Submit"></td>
+                            <td><input type="button" onclick="callInsurance(this.form)" value="Submit"></td>
                         </form>
                     </tr>
                 <% }) %>
@@ -65,11 +65,9 @@
            }
            else
            {
-                
+               alert("accepted");
            }
         })
         .catch(error => console.log('error is', error));
-
     }
-
 </script>
