@@ -87,7 +87,7 @@ module.exports = {
                     res.send({ status: "unauthentic", error: "Invalid email" })
                 } else {
 
-                    //////pending update here
+                    //////pending
                     MbrUser.update({ Email: email }).set({
                         Token: ""
                     }).exec(function (err) {
@@ -125,6 +125,11 @@ module.exports = {
                     } else {
                         var decipher = crypto.createDecipher(algorithm, key);
                         var decrypted = decipher.update(user.Password, 'hex', 'utf8') + decipher.final('utf8');
+
+                        var usernameCipher = crypto.createCipher(algorithm, key);
+                        var token = usernameCipher.update(user.email, 'utf8', 'hex') + usernameCipher.final('hex');
+
+                        // console.log(decrypted)
 
                         if (password == decrypted) {
                             res.send({ status: "authentic" , token:token})

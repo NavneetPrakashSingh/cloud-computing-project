@@ -13,8 +13,8 @@ module.exports = {
     fullName:{type:'string'},
     salary:{type:'string'},
     tenure:{type:'string'},
-    email:{type:'string', unique: true, required: true}
-
+    email:{type:'string', unique: true, required: true},
+    token:{type:'string'}
   },
 
 };

@@ -13,12 +13,13 @@
             }
         });
         var PageURL = window.location.search.substring(1);
-        var URLVariables = PageURL.split('=');
-        //alert(URLVariables[1]);
-        var empID=URLVariables[1];
+        var URLVariables = PageURL.split('&');
+        var firstQueryParam = URLVariables[0].split('=');
+        var secondQueryParam = URLVariables[1].split('=');
+        var empID=firstQueryParam[1];
         document.getElementById('empID').value = empID;
       });
-   
+
       $(document).ready(function(){
         $('.supply').click(function(){
         if(checked){
@@ -42,14 +43,14 @@
              }
             });
         }
-       
+
         }
         else{
           alert("Please agree the checkbox to supply information..!!!");
         }
       });
       });
-     
+
 
     </script>
     <style type="text/css">
@@ -72,22 +73,22 @@
             font-size: 18px;
           }
         </style>
-    
+
         <div class="container-fluid" id="mainDiv">
          <div class="col-lg-4">
-    
+
         </div>
         <!-- action="/employee/sendInfo" method="Get" -->
         <form>
           <div class="col-lg-4" id="subDiv">
-           <div> 
+           <div>
              <center><h1>Information Supply Form</h1></center>
            </div>
            <div class="form-group">
-              <label for="empID">Employee ID:</label> 
-              <input type="text" class="form-control" id="empID" required=true 
+              <label for="empID">Employee ID:</label>
+              <input type="text" class="form-control" id="empID" required=true
                name="empID" readonly>
-       
+
             </div>
           <div class="form-group">
             <label for="appNumber">Mortgage Application Number:</label>
@@ -100,22 +101,21 @@
              required=true placeholder="Enter Broker's web-service address" required>
           </div>
           <div class="form-group">
-    
+
             <input type="checkbox" id="agree">&nbsp;<b>Do you agree to supply Information?</b>
-    
+
           </div>
-    
+
          <center><button type="button" class="btn btn-primary supply" id="btn">Submit</button></center>
         </div>
         </form>
         <div class="col-lg-4">
-    
+
         </div>
         </div>
-        
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-        
