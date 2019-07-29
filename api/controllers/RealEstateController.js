@@ -21,7 +21,7 @@ module.exports = {
         var name = req.param("name");
         var MortID = req.param("MortID");
         var MlsID = req.param("MlsID");
-        
+
         RealEstate.create({
             fullName: name,
             MlsID : MlsID,
@@ -73,8 +73,8 @@ module.exports = {
         });
     },
 
-    deleteApplication: function (req,res) { 
-        
+    deleteApplication: function (req,res) {
+
         Logger.log("call: deleteApplication", controller + "deleteApplication");
 
         var MortID = req.param("MortID");
@@ -91,7 +91,7 @@ module.exports = {
                 return res.send({status:"Successful"});
             }
         })
-       
+
     },
 
     appraiserSignUp: function (req, res) {
@@ -100,7 +100,7 @@ module.exports = {
 
         var email = req.param("email");
         var password = req.param("password");
-        var cipher = crypto.createCipher(algorithm, key);  
+        var cipher = crypto.createCipher(algorithm, key);
         password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
         Appraiser.create({
             email : email,
@@ -152,8 +152,4 @@ module.exports = {
                 }
             })
     },
-
-
-
 };
-
