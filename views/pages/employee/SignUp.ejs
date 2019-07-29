@@ -27,7 +27,7 @@
         //         window.location.replace("/employee");
         //     }
         //     else{
-                
+
         //     }
         // });
     </script>
@@ -49,7 +49,7 @@
     var salary=document.getElementById("salary").value;
     var password=document.getElementById("password").value;
     var tenure=document.getElementById("tenure").value;
-    
+
     //alert(username+""+password);
     $.ajax({
                   url:url,
@@ -58,25 +58,27 @@
                   success:function(result){
                     console.log(result);
                     if(result.invalid){
-                       alert('Employee already exists!') 
+                       alert('Employee already exists!')
                     }else{
                       alert(result.success);
                       window.location.href = "/employee/SignIn";
                     }
-             
+
                   },
                   error:function(error){
                     //console.log(error)
                   }
                 });
-                
+
   }
     </script>
+<input class="emp" type="hidden" value="emp-signUp" />
+
     <div class="container-fluid" id="mainDiv">
         <!-- action="/employee/create" method="POST" -->
         <form>
           <div class="col-lg-4">
-    
+
           </div>
           <div class="col-lg-4" id="sign-in-form">
            <div>
@@ -111,7 +113,7 @@
         </form>
         </div>
         <div class="col-lg-4">
-    
+
           </div>
          </div>
 
@@ -120,4 +122,3 @@
          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
-         
