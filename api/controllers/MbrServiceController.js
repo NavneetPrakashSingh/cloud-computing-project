@@ -236,9 +236,9 @@ module.exports = {
                     Logger.log(err, controller + "mbrStatus");
                     res.send(err);
                 } else {
-                    // if(user.IsInsurable == true && user.InsuredValue>50000){
-                    // Logger.sendemail(user.Email);
-                    // }
+                    if(user.IsInsurable == true){
+                    Logger.sendemail(user.Email);
+                    }
                     res.send(user)
                 }
             })
