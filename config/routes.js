@@ -34,7 +34,7 @@ module.exports.routes = {
 
   // MBR Application routes:
   '/mbr'           : {view: 'pages/mbr/homepage', locals: {layout: 'layouts/mbr/layout.ejs'}},
-  '/mbr/signup'    : {view: 'pages/mbr/signup', locals: {layout: 'layouts/mbr/layout.ejs'}},
+  '/mbr/signup'    : {controller:'MbrServiceController', action: 'fetchApplication'},
   '/mbr/signin'    : {view: 'pages/mbr/signin', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/dashboard' : {view: 'pages/mbr/dashboard', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/tokenMismatch' : {view: 'pages/mbr/token', locals: {layout: 'layouts/mbr/layout.ejs'}},
@@ -72,6 +72,11 @@ module.exports.routes = {
   'Post /employee/auth' : {
     controller : 'EmployeeController',
     action : 'authenticateUser'
+  },
+
+  'Get /employee/employeeGetToken' : {
+    controller : 'EmployeeController',
+    action : 'employeeGetToken'
   },
 
   'Get /employee/sendInfo' : {

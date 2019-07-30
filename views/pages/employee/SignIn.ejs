@@ -20,7 +20,7 @@
       font-size: 18px;
     }
   </style>
-      <script type="text/javascript">
+      <!-- <script type="text/javascript">
         $(document).ready(function(){
             var token=localStorage.getItem("employee");
             if(token){
@@ -30,7 +30,7 @@
 
             }
         });
-    </script>
+    </script> -->
   <script type="text/javascript">
   function signin(){
     var url="/employee/auth";
@@ -50,8 +50,10 @@
                       // $('#mainDiv').html('');
                       // $('#mainDiv').html(result);
                       //alert(result.empID);
-                      localStorage.setItem("employee", "In");
+                     // localStorage.setItem("employee", "In");
                       var empID=result.empID;
+                      localStorage.setItem("Empemail", $('#email').val());
+                      alert(result.token);
                       window.location.href="/employee/MortgageInfoSupply?empID="+empID+"&token="+result.token;
                     }
 
@@ -63,6 +65,7 @@
 
   }
   </script>
+<input class="emp" type="hidden" value="emp-signIn" />
 
   <div class="container-fluid" id="mainDiv">
     <div class="col-lg-4">
