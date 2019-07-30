@@ -23,15 +23,15 @@ module.exports = {
                 var log = "Failed to fetch list of properties";
                 var timestamp = new Date().getTime();
                 var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
+                // Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
+                // });
             } else {
                 //Log appraisals fetched
                 var log = "Log appraisals fetched";
                 var timestamp = new Date().getTime();
                 var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
+                // Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
+                // });>?
                 res.locals.layout = "layouts/mbr/layout.ejs";
                 return res.view('pages/mbr/signup',{Properties:Properties});
             }
