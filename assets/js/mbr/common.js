@@ -12,7 +12,7 @@ var validSignupMortgageValue = false;
 var baseUrl = "https://cloud-computing-project-nodes.herokuapp.com";
 
 $(document).ready(function () {
-    alert("inside common.js");
+    // alert("inside common.js");
     if (localStorage.getItem("email")) {
         $('.navbar-nav').html("");
         $('.navbar-nav').append("<li class=\"nav-item logout\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
