@@ -4,6 +4,10 @@
 
     var checked=false;
     $(document).ready(function(){
+
+      });
+
+      $(document).ready(function(){
         $('input[type="checkbox"]').click(function(){
             if($(this).prop("checked") == true){
                 checked=true;
@@ -18,9 +22,7 @@
         var secondQueryParam = URLVariables[1].split('=');
         var empID=firstQueryParam[1];
         document.getElementById('empID').value = empID;
-      });
 
-      $(document).ready(function(){
         $('.supply').click(function(){
         if(checked){
         var empID=document.getElementById("empID").value;
@@ -33,7 +35,7 @@
           $.ajax({
             url:"/employee/sendInfo",
             type:"GET",
-            data:{'empID':empID,'mbrID':mbrID,'address':address},
+            data:{'empID':empID,'mbrID':mbrID,'address':address,'token':secondQueryParam[1]},
             success:function(result){
               alert(result);
               document.getElementById("btn").disabled = true;
