@@ -10,6 +10,7 @@ var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
 var key = 'cloudComputing';
 var Logger = require('../../assets/custom/LoggerService');
 var controller = "MbrServiceController.";
+var nodemailer = require('nodemailer');
 
 module.exports = {
 
@@ -180,6 +181,32 @@ module.exports = {
     },
 
 
+    mbrgetMail: function (req, res) {
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'navneetcloudproject@gmail.com',
+              pass: 'nAvneet94'
+            }
+          });
+          
+          var mailOptions = {
+            from: 'navneetcloudproject@gmail.com',
+            to: 'navneet.singh@dal.ca',
+            subject: 'Your Status Is Confirmed',
+            text: 'Congratulations! Your status has been updated'
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+        
+    },
+
     mbrgetToken: function (req, res) {
 
         Logger.log("call: mbrgetToken", controller + "mbrgetToken");
@@ -209,6 +236,9 @@ module.exports = {
                     Logger.log(err, controller + "mbrStatus");
                     res.send(err);
                 } else {
+                    if(user.IsInsurable == true && user.InsuredValue>50000){
+                    Logger.sendemail(user.Email);
+                    }
                     res.send(user)
                 }
             })

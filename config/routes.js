@@ -29,6 +29,7 @@ module.exports.routes = {
   '/mbr/confirm-insurance-availability'  : {controller: 'MbrServiceController', action: 'mbrConfirmInsuranceAvailability', locals: {layout: 'layouts/mbr/layout.ejs'}},
   '/mbr/remove-session' : {controller: 'MbrServiceController',action:'mbrRemoveSession'},
   '/mbr/getToken' : {controller: 'MbrServiceController',action:'mbrgetToken'},
+  '/mbr/sendMail': {controller: 'MbrServiceController',action:'mbrgetMail'},
 
 
   // MBR Application routes:

@@ -5,6 +5,7 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 var Logger = require('../../assets/custom/LoggerService');
+// var MbrServiceController = require('MbrServiceController');
 var controller = "INSincController.";
 
 module.exports = {
@@ -28,7 +29,7 @@ module.exports = {
 
         var request = require('request');
 
-        url = 'http://localhost:1337/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
+        url = '/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + false + '&insuredValue=' + 0 + '&deductable=' + 0 + 
                 '&applicantName=' + applicantName
 
@@ -49,7 +50,7 @@ module.exports = {
         var deductable = insuredValue*0.02;
 
         // https://stackoverflow.com/questions/30523872/make-a-http-request-in-your-controller-sails-js
-        url = 'http://localhost:1337/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
+        url = '/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + true + '&insuredValue=' + insuredValue + '&deductable=' + deductable + 
                 '&applicantName=' + applicantName;
         if(appraisalValue >= 50000) {
@@ -59,6 +60,7 @@ module.exports = {
                 if (error) {
                     Logger.log(error, controller + "checkInsuranceAvailability");
                 } else {
+
                     return res.send({ status: "approved", reason: "Appraisal value is higher than 50000." });
                 }
             });
