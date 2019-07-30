@@ -10,12 +10,7 @@ var assert = require("assert");
 var algorithm = "aes256"; // or any other algorithm supported by OpenSSL
 var key = "cloudComputing";
 var Logger = require('../../assets/custom/LoggerService');
-<<<<<<< HEAD
-var controller = "MbrServiceController.";
-
-=======
 var controller = "EmployeeController";
->>>>>>> 22c58ab97c3599dd8c0d2703c02c549d9c2d4f24
 module.exports = {
   create: function(req, res, next) {
     Logger.log("call: create", controller + "create");
