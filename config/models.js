@@ -4,7 +4,7 @@ module.exports.models = {
   //schema: true,
 
   migrate: 'drop',
-
+ 
 
   attributes: {
     id: { type: 'number', autoIncrement: true, },
