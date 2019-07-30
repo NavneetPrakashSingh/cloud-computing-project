@@ -153,7 +153,7 @@ module.exports = {
                         var decipher = crypto.createDecipher(algorithm, key);
                         var decrypted = decipher.update(user.Password, 'hex', 'utf8') + decipher.final('utf8');
 
-                        var nameCipher = crypto.createCipher(algorithm, key); 
+                        var nameCipher = crypto.createCipher(algorithm, key);
                         var token = nameCipher.update(user.Email, 'utf8', 'hex') + nameCipher.final('hex');
 
                         if (password == decrypted) {
@@ -189,14 +189,14 @@ module.exports = {
               pass: 'nAvneet94'
             }
           });
-          
+
           var mailOptions = {
             from: 'navneetcloudproject@gmail.com',
             to: 'navneet.singh@dal.ca',
             subject: 'Your Status Is Confirmed',
             text: 'Congratulations! Your status has been updated'
           };
-          
+
           transporter.sendMail(mailOptions, function(error, info){
             if (error) {
               console.log(error);
@@ -204,7 +204,7 @@ module.exports = {
               console.log('Email sent: ' + info.response);
             }
           });
-        
+
     },
 
     mbrgetToken: function (req, res) {
@@ -253,6 +253,7 @@ module.exports = {
         var tenure = req.param("tenure");
         var salary = req.param("salary");
         var id = req.param("id");
+        console.log(id);
 
         MbrUser.findOne({ id: id })
             .exec(function (err, user) {
