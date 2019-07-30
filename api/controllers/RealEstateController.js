@@ -31,7 +31,7 @@ module.exports = {
             if (err) {
                 var errCode = err.code;
                 if (errCode == "E_UNIQUE") {
-                  Logger.log("E_UNIQUE", controller + "requestAppraisal");
+                  Logger.log("Error in request appraisal"+err, controller + "requestAppraisal");
                     return res.send({ error: "MortID already exist", status: "fail" });
                 }  else {
                     return res.send({ error: message, status: "fail" });
@@ -110,10 +110,10 @@ module.exports = {
             if (err) {
                 var errCode = err.code;
                 if (errCode == "E_UNIQUE") {
-                    Logger.log("Log error message;E_UNIQUE", controller + "appraiserSignUp");
+                    Logger.log("Log error message;Error during appraiser sign up, email already exsists", controller + "appraiserSignUp");
                     res.send({ error: "Email already exist", status: "fail" });
                 }  else {
-                    Logger.log("Failed in signing up", controller + "appraiserSignUp");
+                    Logger.log("Failed in signing up"+err, controller + "appraiserSignUp");
                     res.send({ error: message, status: "fail" });
                 }
             } else {
@@ -137,7 +137,7 @@ module.exports = {
                     return res.send(err);
                 } else {
                     if (!appraiser) {
-                      Logger.log("Error in appraiserLogin", controller + "appraiserLogin");
+                      Logger.log("Error in appraiserLogin"+err, controller + "appraiserLogin");
                       return res.send({ status: "unauthentic", error: "Appraiser is not registered" })
                     } else {
                         var decipher = crypto.createDecipher(algorithm, key);
@@ -145,7 +145,7 @@ module.exports = {
                         if (password == decrypted) {
                             return res.send({ status: "authentic" })
                         } else {
-                            Logger.log("Error in appraiserLogin", controller + "appraiserLogin");
+                            Logger.log("Error in appraiserLogin"+err, controller + "appraiserLogin");
                             return res.send({ status: "unauthentic", error: "Email-Password combination does not exist" })
                         }
                     }
