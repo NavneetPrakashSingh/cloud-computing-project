@@ -238,8 +238,11 @@ module.exports = {
                     Logger.log(err, controller + "mbrStatus");
                     res.send(err);
                 } else {
-                    if(user.IsInsurable == true){
+                    if(user.IsInsurable == true &&  user.InsuredValue>= 50000){
+                    Logger.log(user, controller + "Email Send Successfully");
                     Logger.sendemail(user.Email);
+                    }else{
+                        Logger.log(user, controller + "Unable to send email");
                     }
                     res.send(user)
                 }
