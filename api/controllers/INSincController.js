@@ -50,7 +50,7 @@ module.exports = {
         var deductable = insuredValue*0.02;
 
         // https://stackoverflow.com/questions/30523872/make-a-http-request-in-your-controller-sails-js
-        url = 'http://localhost:1337/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
+        url = 'https://cloud-computing-project-nodes.herokuapp.com/mbr/confirm-insurance-availability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + true + '&insuredValue=' + insuredValue + '&deductable=' + deductable + 
                 '&applicantName=' + applicantName;
         if(appraisalValue >= 50000) {
