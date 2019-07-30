@@ -9,9 +9,10 @@ var validSignupPhoneNumber = false;
 var validSignupSalary = false;
 var validSignupTenure = false;
 var validSignupMortgageValue = false;
+var baseUrl = "https://cloud-computing-project-nodes.herokuapp.com";
 
 $(document).ready(function () {
-    alert("inside common.js");
+    // alert("inside common.js");
     if (localStorage.getItem("email")) {
         $('.navbar-nav').html("");
         $('.navbar-nav').append("<li class=\"nav-item logout\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item dashboard\"><span class=\"nav-link\">Dashboard</span></li>");
@@ -27,6 +28,7 @@ $(document).ready(function () {
     }
 
     if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
+        // alert(localStorage.getItem("email"));
         if(localStorage.getItem("email")){
             $.ajax({
                 url: '/mbr/getToken?email='+localStorage.getItem("email"),
@@ -35,6 +37,7 @@ $(document).ready(function () {
                 }
             })
                 .done(function (data) {
+                    // alert(data);
                     if(data.token){
                         window.location.replace("/mbr/dashboard?token="+data.token);
                     }
@@ -184,20 +187,6 @@ $(document).on("click", "li.appform", function () {
 
 
 $(document).on("click", "li.dashboard", function () {
-    window.location.replace("/mbr/dashboard");
-});
-
-
-// $(document).on("click", "li.dashboard-emp", function () {
-//     window.location.replace("/employee");
-// });
-
-
-// $(document).on("click", "li.dashboard-re", function () {
-//     window.location.replace("/realEstate");
-// });
-    //here
-    // window.location.replace("/mbr/dashboard");
     if(localStorage.getItem("email")){
         $.ajax({
             url: '/mbr/getToken?email='+localStorage.getItem("email"),
@@ -213,6 +202,9 @@ $(document).on("click", "li.dashboard", function () {
     }else{
 
     }
+});
+
+
 
 
 $('.signin-email').focus(function () {
@@ -464,7 +456,7 @@ $('.signup-button').click(function () {
             url: '/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
                 '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' +
                 $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+
-                '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=' + $('.signup-property-id').val(),
+                '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=1',
             dataType: 'json',
             beforeSend: function (xhr) {
                 $('.signup-button').text("Loading...");
@@ -479,7 +471,7 @@ $('.signup-button').click(function () {
                     localStorage.setItem("token", response.token);
                     window.location.replace("/mbr/dashboard?token="+response.token);
                 } else {
-                    alert(response.error);
+                    // alert(response.error);
                 }
             })
     } else {
