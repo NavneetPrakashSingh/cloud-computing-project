@@ -13,7 +13,7 @@ var Logger = require("../../assets/custom/LoggerService");
 var controller = "EmployeeController";
 module.exports = {
   create: function(req, res, next) {
-    Logger.log("call: create", controller + "create");
+    Logger.log("Inside createfunc() "+req.body, controller + "create");
 
     var name = req.body.name;
     var email = req.body.email;
@@ -43,7 +43,7 @@ module.exports = {
           password: password
         }).exec(function(req_err) {
           if (req_err) {
-            Logger.log("Database Error", controller + "create");
+            Logger.log("Database Error"+req_err, controller + "create()");
           } else {
             return res.send({
               success: "Employee profile successfully created..!!!"
@@ -54,7 +54,7 @@ module.exports = {
     });
   },
   employeeGetToken: function(req, res) {
-    Logger.log("call: employeeGetToken", controller + "employeeGetToken");
+    Logger.log("Inside employeeGetToken()",req.param("email"), controller + "employeeGetToken");
 
     var email = req.param("email");
 
@@ -69,7 +69,7 @@ module.exports = {
 
   // SHOW DATABASE OF COMPANY.
   getEmployeeDB: function(req, res) {
-    Logger.log("call: getEmployeeDB", controller + "getEmployeeDB");
+    Logger.log("call: getEmployeeDB()", controller + "getEmployeeDB");
 
     Employee.find({}).exec(function(err, rec) {
       if (err) {
@@ -89,17 +89,14 @@ module.exports = {
   },
 
   supplyMBRinfo: function(req, res) {
-    Logger.log("call: supplyMBRinfo", controller + "supplyMBRinfo");
+    Logger.log("call: supplyMBRinfo"+req.body, controller + "supplyMBRinfo");
     var employeeId = req.param("empID");
     var address = req.param("address");
     var mbrID = req.param("mbrID");
-    console.log("hello");
-
     var encryptedEmail = req.param("token");
     var decipher = crypto.createDecipher(algorithm, key);
     var decryptedEmail =
       decipher.update(encryptedEmail, "hex", "utf8") + decipher.final("utf8");
-console.log(decryptedEmail,"hello");
     var request = require("request");
     Employee.find({ empID: employeeId,email:decryptedEmail}).exec(function(err, result) {
       if (err) {
@@ -127,7 +124,6 @@ console.log(decryptedEmail,"hello");
           tenure +
           "&salary=" +
           salary;
-          console.log(endpointURL);
         request.get(
           {
             url: endpointURL
@@ -141,11 +137,10 @@ console.log(decryptedEmail,"hello");
             } else {
               Logger.log(
                 "body,response,enpoint=>" + body + response + endpointURL,
-                controller + "supplyMBRinfo"
+                controller + "supplyMBRinfo()"
               );
               var bodyObject = JSON.parse(body);
               var status = bodyObject.status;
-              console.log(status);
               if ("success" == status) {
                 // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
                 res.send(
@@ -171,7 +166,6 @@ console.log(decryptedEmail,"hello");
         res.send(err);
       } else {
         if (!user) {
-          // Logger("Email is not registered", "MbrServiceController.mbrLogin");
           res.send({ status: "unauthentic", error: "Invalid email" });
         } else {
           //pending update here
@@ -181,7 +175,7 @@ console.log(decryptedEmail,"hello");
             })
             .exec(function(err) {
               if (err) {
-                Logger(err, "Employee");
+                Logger(err+"employeeRemoveSession()", "Employee");
                 res.send(err);
               } else {
                 res.send({ Status: "success" });
@@ -193,7 +187,7 @@ console.log(decryptedEmail,"hello");
   },
 
   authenticateUser: function(req, res) {
-    Logger.log("call: authenticateUser", controller + "authenticateUser");
+    Logger.log("call: authenticateUser()"+req.body, controller + "authenticateUser");
     var password = req.body.password;
     var email = req.body.email;
     var usernameCipher = crypto.createCipher(algorithm, key);
@@ -202,7 +196,7 @@ console.log(decryptedEmail,"hello");
     Employee.find({ email: email }).exec(function(err, result) {
       if (err) {
         Logger.log(
-          "Database Error when retrieving info about employee with ID ",
+          "Database Error when retrieving info about employee with ID "+err,
           controller + "authenticateUser"
         );
         res.send(500, {
