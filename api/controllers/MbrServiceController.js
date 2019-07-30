@@ -30,6 +30,8 @@ module.exports = {
                 var log = "Log appraisals fetched";
                 var timestamp = new Date().getTime();
                 var server = "Properties";
+                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
+                });
                 res.locals.layout = "layouts/mbr/layout.ejs";
                 return res.view('pages/mbr/signup',{Properties:Properties});
             }
@@ -74,12 +76,12 @@ module.exports = {
                 if (err) {
                     var errCode = err.code;
                     if (errCode == "E_UNIQUE") {
-                        var log = "Error in Creating user";
+                        var log = "Error in Creating user: User already exist";
                         Logger.log(log, controller + "mbrAddUser");
                         res.send({ error: "User already exist", status: "fail" });
                     }  else {
                         res.send({ error: err, status: "fail" });
-                        var log = "Error in Creating user in else case";
+                        var log = "Error in Creating user in else case"+err;
                         Logger.log(log, controller + "mbrAddUser");
                         res.send({ error: message, status: "fail" });
                     }
@@ -140,7 +142,7 @@ module.exports = {
         MbrUser.findOne({ Email: email })
             .exec(function (err, user) {
                 if (err) {
-                    Logger.log(err, controller + "mbrLogin");
+                    Logger.log("Error during mbr login"+err, controller + "mbrLogin");
                     res.send(err);
                 } else {
                     if (!user) {

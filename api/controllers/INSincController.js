@@ -38,7 +38,7 @@ module.exports = {
                 url: url
                 }, function(error) {
                 if (error) {
-                    Logger.log(error, controller + "checkInsuranceAvailability");
+                    Logger.log("Declined: Appraisal value is less than 50000."+error, controller + "checkInsuranceAvailability");
                 } else {
                     return res.send({ status: "declined", reason: "Appraisal value is less than 50000." });
                 }
@@ -59,7 +59,7 @@ module.exports = {
                 }, function(error) {
                 if (error) {
                     console.log(error);
-                    Logger.log(error, controller + "checkInsuranceAvailability");
+                    Logger.log( "Approved: Appraisal value is higher than 50000."+error, controller + "checkInsuranceAvailability");
                     return res.send({status:"400",reason:error});
                 } else {
 
