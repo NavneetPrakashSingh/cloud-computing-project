@@ -54,7 +54,7 @@ $(document).ready(function () {
         var emailID = localStorage.getItem("email");
         if (emailID) {
             $.ajax({
-                url: 'http://localhost:1337/mbr/status?email=' + emailID,
+                url: '/mbr/status?email=' + emailID,
                 dataType: 'json',
                 beforeSend: function (xhr) {
 
@@ -205,7 +205,7 @@ $('.signin-button').click(function () {
     if (validateEmail == true && validPassword == true) {
         // var encryptedPassword = CryptoJS.AES.encrypt($('.signin-password').val(), "cloud computing");
         $.ajax({
-            url: 'http://localhost:1337/mbr/mbrLogin?email=' + $('.signin-email').val() + '&password=' + $('.signin-password').val(),
+            url: '/mbr/mbrLogin?email=' + $('.signin-email').val() + '&password=' + $('.signin-password').val(),
             dataType: 'json',
             beforeSend: function (xhr) {
 
@@ -408,7 +408,7 @@ $('.signup-button').click(function () {
     if (validSignupEmail == true && validSignupPassword == true && validSignupAddress == true && validSignupName && validSignupPhoneNumber && validSignupSalary && validSignupTenure && validSignupMortgageValue) {
         // var encryptedPassword = CryptoJS.AES.encrypt($('.signup-password').val(), "cloud computing");
         $.ajax({
-            url: 'http://localhost:1337/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
+            url: '/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
                 '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' +
                 $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+
                 '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=' + $('.signup-property-id').val(),
