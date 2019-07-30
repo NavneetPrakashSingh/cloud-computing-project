@@ -9,7 +9,7 @@ var crypto = require("crypto");
 var assert = require("assert");
 var algorithm = "aes256"; // or any other algorithm supported by OpenSSL
 var key = "cloudComputing";
-var Logger = require('../../assets/custom/LoggerService');
+var Logger = require("../../assets/custom/LoggerService");
 var controller = "EmployeeController";
 module.exports = {
   create: function(req, res, next) {
@@ -44,29 +44,28 @@ module.exports = {
         }).exec(function(req_err) {
           if (req_err) {
             Logger.log("Database Error", controller + "create");
-          }
-          else{
-            return res.send({ success: "Employee profile successfully created..!!!" });
+          } else {
+            return res.send({
+              success: "Employee profile successfully created..!!!"
+            });
           }
         });
       }
     });
   },
-  employeeGetToken: function (req, res) {
-
+  employeeGetToken: function(req, res) {
     Logger.log("call: employeeGetToken", controller + "employeeGetToken");
 
     var email = req.param("email");
 
-    Employee.findOne({ email: email })
-        .exec(function (err, user) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.send({"token":user.token});
-            }
-        })
-},
+    Employee.findOne({ email: email }).exec(function(err, user) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send({ token: user.token });
+      }
+    });
+  },
 
   // SHOW DATABASE OF COMPANY.
   getEmployeeDB: function(req, res) {
@@ -94,60 +93,75 @@ module.exports = {
     var employeeId = req.param("empID");
     var address = req.param("address");
     var mbrID = req.param("mbrID");
-    var request = require("request");
-    Employee.find({ empID: employeeId }).exec(function(err, result) {
-      var data = result[0];
-      var name = data.fullName;
-      var tenure = data.tenure;
-      var salary = data.salary;
-      var email = data.email;
+    console.log("hello");
 
+    var encryptedEmail = req.param("token");
+    var decipher = crypto.createDecipher(algorithm, key);
+    var decryptedEmail =
+      decipher.update(encryptedEmail, "hex", "utf8") + decipher.final("utf8");
+console.log(decryptedEmail,"hello");
+    var request = require("request");
+    Employee.find({ empID: employeeId,email:decryptedEmail}).exec(function(err, result) {
       if (err) {
-        res.send(500, {
+        return res.send(500, {
           error:
             "Database Error when retrieving info about employee with ID " +
             employeeId
         });
-      }
-      var endpointURL =
-        address +
-        "?name=" +
-        name +
-        "&email=" +
-        email +
-        "&id=" +
-        mbrID +
-        "&tenure=" +
-        tenure +
-        "&salary=" +
-        salary;
-      request.get(
-        {
-          url: endpointURL
-        },
-        function(error, response, body) {
-          if (error) {
-            Logger.log("Something went wrong calling url" + endpointURL, controller + "supplyMBRinfo");
-          } else {
-            Logger.log("body,response,enpoint=>"+body+response+endpointURL, controller + "supplyMBRinfo");
-            var bodyObject = JSON.parse(body);
-            var status = bodyObject.status;
-            console.log(status);
-            if ("success" == status) {
-              // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
-              res.send(
-                "We have successfully forwarded your application. Please check MBR portal for the application progress. "
+      } else {
+        var data = result[0];
+        var name = data.fullName;
+        var tenure = data.tenure;
+        var salary = data.salary;
+        var email = data.email;
+
+        var endpointURL =
+          address +
+          "?name=" +
+          name +
+          "&email=" +
+          email +
+          "&id=" +
+          mbrID +
+          "&tenure=" +
+          tenure +
+          "&salary=" +
+          salary;
+          console.log(endpointURL);
+        request.get(
+          {
+            url: endpointURL
+          },
+          function(error, response, body) {
+            if (error) {
+              Logger.log(
+                "Something went wrong calling url" + endpointURL,
+                controller + "supplyMBRinfo"
               );
             } else {
-              // res.send("<h2>We have forwarded your application, but some error happened on the MBR side.</h2> <h2> MBR response is: "+body + "</h2>");
-              res.send(
-                "We have forwarded your application, but some error happened on the MBR side. MBR response is: " +
-                  body
+              Logger.log(
+                "body,response,enpoint=>" + body + response + endpointURL,
+                controller + "supplyMBRinfo"
               );
+              var bodyObject = JSON.parse(body);
+              var status = bodyObject.status;
+              console.log(status);
+              if ("success" == status) {
+                // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
+                res.send(
+                  "We have successfully forwarded your application. Please check MBR portal for the application progress. "
+                );
+              } else {
+                // res.send("<h2>We have forwarded your application, but some error happened on the MBR side.</h2> <h2> MBR response is: "+body + "</h2>");
+                res.send(
+                  "We have forwarded your application, but some error happened on the MBR side. MBR response is: " +
+                    body
+                );
+              }
             }
           }
-        }
-      );
+        );
+      }
     });
   },
   employeeRemoveSession: function(req, res) {
@@ -187,7 +201,10 @@ module.exports = {
       usernameCipher.update(email, "utf8", "hex") + usernameCipher.final("hex");
     Employee.find({ email: email }).exec(function(err, result) {
       if (err) {
-        Logger.log("Database Error when retrieving info about employee with ID ", controller + "authenticateUser");
+        Logger.log(
+          "Database Error when retrieving info about employee with ID ",
+          controller + "authenticateUser"
+        );
         res.send(500, {
           error:
             "Database Error when retrieving info about employee with email " +
@@ -217,8 +234,7 @@ module.exports = {
             }
           });
 
-
-        return res.send({ empID: data.empID, token:token });
+        return res.send({ empID: data.empID, token: token });
       } else {
         Logger.log("Not authentic user", controller + "authenticateUser");
         return res.send({ invalid: "invalid" });

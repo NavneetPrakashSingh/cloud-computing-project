@@ -3,7 +3,7 @@ module.exports.models = {
 
   //schema: true,
 
-  migrate: 'drop',
+  migrate: 'alter',
   
 
   attributes: {

@@ -114,7 +114,7 @@ module.exports.routes = {
     action: 'requestAppraisal'
   },
 
-  'Get /realEstate/fetchAppraisals/1' : {
+  'Get /realEstate/fetchAppraisals' : {
     controller : 'RealEstateController',
     action: 'fetchAppraisals'
   },

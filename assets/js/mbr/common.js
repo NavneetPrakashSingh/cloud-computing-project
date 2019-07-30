@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
     if (localStorage.getItem("realEstate")) {
         $('.navbar-nav').html("");
-        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li>  <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
+        $('.navbar-nav').append("<li class=\"nav-item logout-re\"><span class=\"nav-link\">Logout</span></li> <li class=\"nav-item appraisallist\"><span class=\"nav-link\">Appraisals List </span></li>  <li class=\"nav-item appform\"><span class=\"nav-link\">Application Form </span></li>");
     }
 
     if ($('.identify-page').val() == "signin" || $('.identify-page').val() == "signup") {
@@ -183,6 +183,10 @@ $(document).on("click", "li.logout-re", function () {
 })
 $(document).on("click", "li.appform", function () {
     window.location.replace("/realEstate/applicationForm");
+})
+
+$(document).on("click", "li.appraisallist", function () {
+    window.location.replace("/realEstate/fetchAppraisals");
 })
 
 
