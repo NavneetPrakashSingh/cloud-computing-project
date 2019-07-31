@@ -36,8 +36,11 @@
     var url="/employee/auth";
     var username=document.getElementById("email").value;
     var password=document.getElementById("password").value;
-    //alert(username+""+password);
-    $.ajax({
+    if(!username || !password){
+      alert("You cannot leave username or password blank. You need to enter something in both of these fields..!!!");
+    }
+    else{
+      $.ajax({
                   url:url,
                   type:"POST",
                   data:{email:username,password:password},
@@ -62,6 +65,9 @@
                     console.log("Error ${error}")
                   }
                 });
+    }
+    //alert(username+""+password);
+  
 
   }
   </script>
