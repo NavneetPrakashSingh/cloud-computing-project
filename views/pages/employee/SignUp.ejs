@@ -49,9 +49,12 @@
     var salary=document.getElementById("salary").value;
     var password=document.getElementById("password").value;
     var tenure=document.getElementById("tenure").value;
-
-    //alert(username+""+password);
-    $.ajax({
+        
+    if(!name || !email || !salary || !password || !tenure){
+      alert("The name | email | salary | password | tenure are required fields. You need to enter values in them and you cannot leave them blank..!!")
+    }
+    else{
+      $.ajax({
                   url:url,
                   type:"POST",
                   data:{name:name,email:email,salary:salary,password:password,tenure:tenure},
@@ -69,6 +72,9 @@
                     //console.log(error)
                   }
                 });
+    }
+    //alert(username+""+password);
+  
 
   }
     </script>
