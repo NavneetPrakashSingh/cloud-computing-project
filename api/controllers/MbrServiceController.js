@@ -19,19 +19,9 @@ module.exports = {
         Properties.find()
         .exec(function (err,Properties) {
             if (err) {
-                //Log error message: failed to fetch list of appraisals
-                var log = "Failed to fetch list of properties";
-                var timestamp = new Date().getTime();
-                var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
+                Logger.log("Failed to fetch list of properties", controller + "fetchApplication");
             } else {
-                //Log appraisals fetched
-                var log = "Log appraisals fetched";
-                var timestamp = new Date().getTime();
-                var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
+                Logger.log("Log appraisals fetched",  controller + "fetchApplication");
                 res.locals.layout = "layouts/mbr/layout.ejs";
                 return res.view('pages/mbr/signup',{Properties:Properties});
             }
