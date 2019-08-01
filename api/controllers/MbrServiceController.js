@@ -75,7 +75,7 @@ module.exports = {
                     res.send({ error: message, status: "fail" });
                 }
             } else {
-                endpointURL = "https://cloud-project-group4-workflow.herokuapp.com/registerNewApplication?" + "MBRApplicationId=" + user.id;
+                endpointURL = "https://cloud-project-group4-workflow.herokuapp.com/web/registerNewApplication?" + "MBRApplicationId=" + user.id;
                 request.get(
                     {
                         url: endpointURL

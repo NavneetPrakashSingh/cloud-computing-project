@@ -5,4 +5,4 @@ COPY ["package.json","package-lock.json*","./"]
 RUN npm install
 COPY . .
 EXPOSE 1337
-CMD sails lift 
+CMD sails lift --drop

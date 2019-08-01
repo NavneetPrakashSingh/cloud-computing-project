@@ -29,7 +29,7 @@ module.exports = {
 
         var request = require('request');
 
-        url = 'https://cloud-project-group4-workflow.herokuapp.com/confirmInsuranceAvailability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
+        url = 'https://cloud-project-group4-workflow.herokuapp.com/web/confirmInsuranceAvailability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + false + '&insuredValue=' + 0 + '&deductable=' + 0 + 
                 '&applicantName=' + applicantName
 
@@ -50,7 +50,7 @@ module.exports = {
         var deductable = insuredValue*0.02;
 
         // https://stackoverflow.com/questions/30523872/make-a-http-request-in-your-controller-sails-js
-        url = 'https://cloud-project-group4-workflow.herokuapp.com/confirmInsuranceAvailability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
+        url = 'https://cloud-project-group4-workflow.herokuapp.com/web/confirmInsuranceAvailability?' + 'MortId=' + mortId + '&MlsID=' + mlsID + 
                 '&isInsurable=' + true + '&insuredValue=' + insuredValue + '&deductable=' + deductable + 
                 '&applicantName=' + applicantName;
         if(appraisalValue >= 50000) {
