@@ -341,6 +341,8 @@ module.exports = {
                             if (err) {
                                 Logger.log(err, controller + "mbrConfirmInsuranceAvailability");
                                 res.send(err);
+                            } else {
+                                Logger.sendemail(user.Email);
                             }
                         })
                     } else {
