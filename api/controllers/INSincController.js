@@ -62,7 +62,7 @@ module.exports = {
                     Logger.log( "Approved: Appraisal value is higher than 50000."+error, controller + "checkInsuranceAvailability");
                     return res.send({status:"400",reason:error});
                 } else {
-
+                    Logger.log( "Request is accepted and Appraisal value is higher than 50000.", controller + "checkInsuranceAvailability");
                     return res.send({ status: "approved", reason: "Appraisal value is higher than 50000." });
                 }
             });

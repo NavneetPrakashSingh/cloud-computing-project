@@ -460,7 +460,7 @@ $('.signup-button').click(function () {
             url: '/mbr/addUser?name=' + $('.signup-name').val() + '&email=' + $('.signup-email').val() +
                 '&password=' + $('.signup-password').val() + '&address=' + $('.signup-address').val() + '&phoneNumber=' +
                 $('.signup-phonenumber').val() + '&salary=' + $('.signup-salary').val() + '&tenure=' + $('.signup-tenure').val()+
-                '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID=1',
+                '&mortgageValue=' + $('.signup-mortgage-value').val() + '&mlsID= Park Victoria',
             dataType: 'json',
             beforeSend: function (xhr) {
                 $('.signup-button').text("Loading...");
