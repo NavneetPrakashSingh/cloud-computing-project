@@ -30,6 +30,7 @@ module.exports.routes = {
   '/mbr/remove-session' : {controller: 'MbrServiceController',action:'mbrRemoveSession'},
   '/mbr/getToken' : {controller: 'MbrServiceController',action:'mbrgetToken'},
   '/mbr/sendMail': {controller: 'MbrServiceController',action:'mbrgetMail'},
+  '/mbr/confirm-insurance-and-employment': {controller: 'MbrServiceController',action:'confirmInsuranceAndEmployment'},
 
 
   // MBR Application routes:

@@ -11,31 +11,22 @@ var key = 'cloudComputing';
 var Logger = require('../../assets/custom/LoggerService');
 var controller = "MbrServiceController.";
 var nodemailer = require('nodemailer');
+var request = require("request");
 
 module.exports = {
 
 
-    fetchApplication: function (req,res) {
+    fetchApplication: function (req, res) {
         Properties.find()
-        .exec(function (err,Properties) {
-            if (err) {
-                //Log error message: failed to fetch list of appraisals
-                var log = "Failed to fetch list of properties";
-                var timestamp = new Date().getTime();
-                var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
-            } else {
-                //Log appraisals fetched
-                var log = "Log appraisals fetched";
-                var timestamp = new Date().getTime();
-                var server = "Properties";
-                Logger.create({time:timestamp,log:log,server:server}).exec(function(err){
-                });
-                res.locals.layout = "layouts/mbr/layout.ejs";
-                return res.view('pages/mbr/signup',{Properties:Properties});
-            }
-        });
+            .exec(function (err, Properties) {
+                if (err) {
+                    Logger.log("Failed to fetch list of properties", controller + "fetchApplication");
+                } else {
+                    Logger.log("Log appraisals fetched", controller + "fetchApplication");
+                    res.locals.layout = "layouts/mbr/layout.ejs";
+                    return res.view('pages/mbr/signup', { Properties: Properties });
+                }
+            });
     },
 
 
@@ -70,64 +61,95 @@ module.exports = {
             Status: "Waiting for employee response",
             MortgageValue: mortgageValue,
             MlsID: mlsID,
-            Token:token
-        })
-            .exec(function (err) {
-                if (err) {
-                    var errCode = err.code;
-                    if (errCode == "E_UNIQUE") {
-                        var log = "Error in Creating user: User already exist";
-                        Logger.log(log, controller + "mbrAddUser");
-                        res.send({ error: "User already exist", status: "fail" });
-                    }  else {
-                        res.send({ error: err, status: "fail" });
-                        var log = "Error in Creating user in else case"+err;
-                        Logger.log(log, controller + "mbrAddUser");
-                        res.send({ error: message, status: "fail" });
-                    }
+            Token: token
+        }).fetch().exec(function (err, user) {
+            if (err) {
+                var errCode = err.code;
+                if (errCode == "E_UNIQUE") {
+                    var log = "Error in Creating user: User already exist";
+                    Logger.log(log, controller + "mbrAddUser");
+                    res.send({ error: "User already exist", status: "fail" });
                 } else {
-                    res.send({ status: "Success",token: token });
+                    var log = "Error in Creating user in else case" + err;
+                    Logger.log(log, controller + "mbrAddUser");
+                    res.send({ error: message, status: "fail" });
                 }
-            });
+            } else {
+                endpointURL = "http://localhost:1338/registerNewApplication?" + "MBRApplicationId=" + user.id;
+                request.get(
+                    {
+                        url: endpointURL
+                    },
+                    function (error, response, body) {
+                        if (error) {
+                            // Logger.log(
+                            //   "Something went wrong calling url" + endpointURL,
+                            //   controller + "supplyMBRinfo"
+                            // );
+                        } else {
+                            // Logger.log(
+                            //   "body,response,enpoint=>" + body + response + endpointURL,
+                            //   controller + "supplyMBRinfo()"
+                            // );
+                            // var bodyObject = JSON.parse(body);
+                            // var status = bodyObject.status;
+                            // if ("success" == status) {
+                            //   // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
+                            //   res.send(
+                            //     "We have successfully forwarded your application. Please check MBR portal for the application progress. "
+                            //   );
+                            // } else {
+                            //   // res.send("<h2>We have forwarded your application, but some error happened on the MBR side.</h2> <h2> MBR response is: "+body + "</h2>");
+                            //   res.send(
+                            //     "We have forwarded your application, but some error happened on the MBR side. MBR response is: " +
+                            //       body
+                            //   );
+                            // }
+                        }
+                    }
+                );
+                res.send({ status: "Success", token: token });
+            }
+        });
     },
     // SHOW DATABASE OF MBR.
-    getMBRDB:function(req,res){
-      MbrUser.find({}).exec(function(err,rec){
+    getMBRDB: function (req, res) {
+        MbrUser.find({}).exec(function (err, rec) {
 
-        if(err){
-            res.send(500,{error:'Database Error'});
-        }
-      res.view('pages/mbr/listMBR',{recList:rec})
-      });
+            if (err) {
+                res.send(500, { error: 'Database Error' });
+            }
+            res.view('pages/mbr/listMBR', { recList: rec })
+        });
     },
 
-    mbrRemoveSession: function( req,res){
+    mbrRemoveSession: function (req, res) {
         var email = req.param("email");
         MbrUser.findOne({ Email: email })
-        .exec(function (err, user) {
-            if (err) {
-                res.send(err);
-            } else {
-                if (!user) {
-                    // Logger("Email is not registered", "MbrServiceController.mbrLogin");
-                    res.send({ status: "unauthentic", error: "Invalid email" })
+            .exec(function (err, user) {
+                if (err) {
+                    res.send(err);
                 } else {
+                    if (!user) {
+                        // Logger("Email is not registered", "MbrServiceController.mbrLogin");
+                        res.send({ status: "unauthentic", error: "Invalid email" })
+                    } else {
 
-                    //////update here
-                    MbrUser.update({ Email: email }).set({
-                        Token: ""
-                    }).exec(function (err) {
-                        if (err) {
-                            Logger(err, "MBR");
-                            res.send(err);
-                        }else{
-                            res.send({Status:"success"});
-                        }
-                    })
+                        //////update here
+                        MbrUser.update({ Email: email }).set({
+                            Token: ""
+                        }).exec(function (err) {
+                            if (err) {
+                                Logger(err, "MBR");
+                                res.send(err);
+                            } else {
+                                res.send({ Status: "success" });
+                            }
+                        })
+                    }
                 }
-            }
 
-        })
+            })
     },
 
     mbrLogin: function (req, res) {
@@ -142,7 +164,7 @@ module.exports = {
         MbrUser.findOne({ Email: email })
             .exec(function (err, user) {
                 if (err) {
-                    Logger.log("Error during mbr login"+err, controller + "mbrLogin");
+                    Logger.log("Error during mbr login" + err, controller + "mbrLogin");
                     res.send(err);
                 } else {
                     if (!user) {
@@ -166,12 +188,12 @@ module.exports = {
                             }).exec(function (err) {
                                 if (err) {
                                     Logger(err, "MBR");
-                                }else{
+                                } else {
                                     console.log("Token updated successfully");
                                 }
                             })
 
-                            res.send({ status: "authentic" , token:token})
+                            res.send({ status: "authentic", token: token })
                         } else {
                             Logger.log("Email-Password combination does not exist", controller + "mbrLogin");
                             res.send({ status: "unauthentic", error: "Email-Password combination does not exist" })
@@ -187,25 +209,25 @@ module.exports = {
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-              user: 'navneetcloudproject@gmail.com',
-              pass: 'nAvneet94'
+                user: 'navneetcloudproject@gmail.com',
+                pass: 'nAvneet94'
             }
-          });
+        });
 
-          var mailOptions = {
+        var mailOptions = {
             from: 'navneetcloudproject@gmail.com',
             to: 'navneet.singh@dal.ca',
             subject: 'Your Status Is Confirmed',
             text: 'Congratulations! Your status has been updated'
-          };
+        };
 
-          transporter.sendMail(mailOptions, function(error, info){
+        transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-              console.log(error);
+                console.log(error);
             } else {
-              console.log('Email sent: ' + info.response);
+                console.log('Email sent: ' + info.response);
             }
-          });
+        });
 
     },
 
@@ -220,7 +242,7 @@ module.exports = {
                 if (err) {
                     res.send(err);
                 } else {
-                    res.send({"token":user.Token});
+                    res.send({ "token": user.Token });
                 }
             })
     },
@@ -272,7 +294,7 @@ module.exports = {
                             Status: "Application Accepted"
                         }).exec(function (err) {
                             if (err) {
-                                Logger.log(err,  controller + "confirmEmploymentStatus");
+                                Logger.log(err, controller + "confirmEmploymentStatus");
                                 res.send(err);
                             }
                         })
@@ -290,7 +312,7 @@ module.exports = {
             })
     },
 
-    mbrConfirmInsuranceAvailability: function(req, res) {
+    mbrConfirmInsuranceAvailability: function (req, res) {
 
         Logger.log("call: mbrConfirmInsuranceAvailability", controller + "mbrConfirmInsuranceAvailability");
 
@@ -334,6 +356,67 @@ module.exports = {
                     res.send({ status: "success" })
                 }
             })
-    }
+    },
+
+    confirmInsuranceAndEmployment: function (req, res) {
+
+        Logger.log("call: mbrConfirmInsuranceAvailability", controller + "mbrConfirmInsuranceAvailability");
+
+        var mortId = req.param("MortId");
+        var mlsID = req.param("MlsID");
+        var isInsurable = req.param("isInsurable");
+        var insuredValue = req.param("insuredValue");
+        var deductable = req.param("deductable");
+        var applicantName = req.param("applicantName");
+        var email = req.param("email");
+        var tenure = req.param("tenure");
+        var salary = req.param("salary");
+
+        MbrUser.findOne({ id: mortId }).exec(function (err, user) {
+            if (err) {
+                Logger.log(err, controller + "mbrConfirmInsuranceAvailability");
+                res.send(err);
+            } else {
+                if (user && user.MlsID == mlsID && user.Name == applicantName && email == user.Email &&
+                    tenure == user.Tenure && salary == user.Salary && isInsurable == "true") {
+                    MbrUser.update({ id: mortId }).set({
+                        IsInsurable: true,
+                        InsuredValue: insuredValue,
+                        Deductable: deductable,
+                        Status: "Application Accepted"
+                    }).exec(function (err) {
+                        if (err) {
+                            Logger.log(err, controller + "mbrConfirmInsuranceAvailability");
+                            res.send(err);
+                        } else {
+                            res.send({ status: "success" });
+                        }
+                    })
+                } else if (isInsurable == false) {
+                    MbrUser.update({ id: mortId }).set({
+                        IsInsurable: false,
+                        Status: "Application Denied because the property is not isurable"
+                    }).exec(function (err) {
+                        if (err) {
+                            Logger.log(err, controller + "mbrConfirmInsuranceAvailability");
+                            res.send(err);
+                        } else {
+                            res.send({ status: "success" })
+                        }
+                    })
+                } else {
+                    MbrUser.update({ id: mortId }).set({
+                        Status: "Employee detail did not match, send again"
+                    }).exec(function (err) {
+                        if (err) {
+                            res.send(err);
+                        }
+                        return res.send({ status: "fail", error: "Invalid mortgage ID, or property ID MlsID, or user name." })
+                    })
+                }
+                // res.send({ status: "success" })
+            }
+        })
+    },
 };
 

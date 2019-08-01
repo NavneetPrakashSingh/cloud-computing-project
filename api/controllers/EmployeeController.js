@@ -92,6 +92,7 @@ module.exports = {
     Logger.log("call: supplyMBRinfo"+req.body, controller + "supplyMBRinfo");
     var employeeId = req.param("empID");
     var address = req.param("address");
+    var address = "http://localhost:1338/confirmEmploymentStatus"
     var mbrID = req.param("mbrID");
     var encryptedEmail = req.param("token");
     var decipher = crypto.createDecipher(algorithm, key);

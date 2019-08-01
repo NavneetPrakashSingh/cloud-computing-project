@@ -9,7 +9,7 @@ var validSignupPhoneNumber = false;
 var validSignupSalary = false;
 var validSignupTenure = false;
 var validSignupMortgageValue = false;
-var baseUrl = "https://cloud-computing-project-nodes.herokuapp.com";
+var baseUrl = "http://localhost:1337";
 
 $(document).ready(function () {
     // alert("inside common.js");

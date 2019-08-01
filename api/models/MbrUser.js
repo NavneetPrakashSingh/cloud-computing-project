@@ -8,76 +8,76 @@
 module.exports = {
 
   attributes: {
-    Name : {
-      type : "string",
-      required:true
+    Name: {
+      type: "string",
+      required: true
     },
 
     Email: {
-      type : "string",
-      required:true,
-      unique:true
+      type: "string",
+      required: true,
+      unique: true
     },
 
     Password: {
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     Address: {
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     Phone_Number: {
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     Salary: {
-      type:"string",
-      required:true
+      type: "string",
+      required: true
     },
 
     Tenure: {
-      type:"string",
-      required:true
+      type: "string",
+      required: true
     },
 
     Status: {
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     MortgageValue: {
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     MlsID: { // property id
-      type : "string",
-      required:true
+      type: "string",
+      required: true
     },
 
     IsInsurable: {
-      type : "boolean",
+      type: "boolean",
       required: false,
       defaultsTo: true
     },
 
     InsuredValue: {
-      type : "string",
+      type: "string",
       required: false
     },
 
     Deductable: {
-      type : "string",
+      type: "string",
       required: false
     },
 
     Token: {
-      type : "string",
-      required:false
+      type: "string",
+      required: false
     },
 
   },
