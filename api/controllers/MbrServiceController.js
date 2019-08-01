@@ -75,36 +75,16 @@ module.exports = {
                     res.send({ error: message, status: "fail" });
                 }
             } else {
-                endpointURL = "http://localhost:1338/registerNewApplication?" + "MBRApplicationId=" + user.id;
+                endpointURL = "https://cloud-project-group4-workflow.herokuapp.com/registerNewApplication?" + "MBRApplicationId=" + user.id;
                 request.get(
                     {
                         url: endpointURL
                     },
                     function (error, response, body) {
                         if (error) {
-                            // Logger.log(
-                            //   "Something went wrong calling url" + endpointURL,
-                            //   controller + "supplyMBRinfo"
-                            // );
+                            Logger.log("Error happened when registring a new application to the workflow: " + error, controller + "mbrAddUser");
                         } else {
-                            // Logger.log(
-                            //   "body,response,enpoint=>" + body + response + endpointURL,
-                            //   controller + "supplyMBRinfo()"
-                            // );
-                            // var bodyObject = JSON.parse(body);
-                            // var status = bodyObject.status;
-                            // if ("success" == status) {
-                            //   // res.send("<h2><center>We have successfully forwarded your application.</h2> <h2><center>Please check MBR portal for the application progress.</center></center></h2>");
-                            //   res.send(
-                            //     "We have successfully forwarded your application. Please check MBR portal for the application progress. "
-                            //   );
-                            // } else {
-                            //   // res.send("<h2>We have forwarded your application, but some error happened on the MBR side.</h2> <h2> MBR response is: "+body + "</h2>");
-                            //   res.send(
-                            //     "We have forwarded your application, but some error happened on the MBR side. MBR response is: " +
-                            //       body
-                            //   );
-                            // }
+                            Logger.log("New application with ID " + user.id + "was successuffly registered to the workflow", controller + "mbrAddUser");
                         }
                     }
                 );
