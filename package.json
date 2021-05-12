@@ -11,7 +11,7 @@
     "crypto-js": "^3.1.9-1",
     "grunt": "1.0.1",
     "pm2": "^3.5.1",
-    "nodemailer": "^6.3.0",
+    "nodemailer": "^6.4.16",
     "request": "^2.88.0",
     "sails": "^1.2.1",
     "sails-hook-email": "^0.12.1",
